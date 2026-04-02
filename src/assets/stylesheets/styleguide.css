@@ -1,0 +1,133 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: "Tanker";
+  src: url("./fonts/Tanker/OTF/Tanker-Regular.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --c-primary: hsl(272, 84%, 45%);
+  --c-secondary: hsl(38, 83%, 47%);
+  --c-tertiary: hsl(204, 88%, 42%);
+  --c-light: hsl(0, 0%, 100%);
+  --c-bg: hsl(0, 0%, 0%);
+  --c-bg-alt: hsl(0, 0%, 13%);
+  --c-pseudo: hsl(0, 0%, 9%);
+  --c-input: hsl(0, 0%, 14%);
+  --c-anchor: hsl(240, 69%, 77%);
+
+  --f-size-h1: clamp(2rem, 15vw, 8rem);
+  --f-size-h2: clamp(2rem, 12.5vw, 4rem);
+  --f-size-h3: 1.5rem;
+  --f-size-p: 1.1rem;
+  --f-size-bg: clamp(2rem, 90vw, 8rem);
+
+  --f-family-gillsans: "Gill Sans", sans-serif;
+  --f-family-jost: "Jost", sans-serif;
+  --f-family-tanker: "Tanker", sans-serif;
+
+  --lh-p: 1.6;
+  --lh-h: 1;
+  --br: 0.3rem;
+
+  --t-1: "INSPIRE";
+  --t-2: "RISE";
+  --t-3: "YOUTH";
+  --t-4: "BUILD";
+}
+
+body {
+  color: var(--c-light);
+  background: var(--c-bg);
+  font-family: var(--f-family-jost);
+}
+
+main {
+  padding-top: calc(5rem + 40px);
+}
+
+.main-home {
+  padding-top: calc(3rem + 15px);
+}
+
+section {
+  display: grid;
+  padding: 1.5rem;
+  gap: 1.5rem;
+}
+
+button {
+  touch-action: manipulation;
+  user-select: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+em {
+  color: var(--c-secondary);
+  font-style: normal;
+}
+
+p {
+  line-height: var(--lh-p);
+  font-family: var(--f-family-gillsans);
+  font-size: var(--f-size-p);
+}
+
+h1,
+h2,
+h3 {
+  line-height: var(--lh-h);
+  position: relative;
+}
+
+h2:before {
+  color: var(--c-pseudo);
+  font-family: var(--f-family-tanker);
+  font-size: var(--f-size-bg);
+  position: absolute;
+  z-index: -1;
+  top: -5rem;
+}
+
+.h1-font {
+  font-size: var(--f-size-h1);
+  font-weight: 800;
+}
+
+.h2-font {
+  font-size: var(--f-size-h2);
+  z-index: 1;
+}
+
+.h3-font {
+  font-size: var(--f-size-h3);
+}
+
+.btn {
+  background-color: var(--c-primary);
+  color: var(--c-light);
+  border-radius: var(--br);
+
+  width: fit-content;
+  padding: 0.7rem 1.5rem;
+  text-decoration: none;
+}
+
+.label {
+  background: var(--c-tertiary);
+  border-radius: var(--br);
+
+  padding: 0.4rem 1rem;
+  width: max-content;
+}

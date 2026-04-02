@@ -1,0 +1,26 @@
+footer {
+  background: var(--c-bg-alt);
+  min-height: 50vh;
+  display: grid;
+  place-content: baseline;
+  padding: 2.5rem 1.5rem;
+  gap: 2rem;
+
+  img {
+    width: 8rem;
+  }
+
+  a {
+    color: var(--c-anchor);
+  }
+
+  address {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  div {
+    display: flex;
+    gap: 1rem;
+  }
+}

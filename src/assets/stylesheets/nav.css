@@ -1,0 +1,61 @@
+header {
+  nav {
+    height: 5rem;
+    position: fixed;
+    left: 15px;
+    right: 15px;
+    top: 15px;
+    border-radius: var(--br);
+    z-index: 10;
+    background-color: hsl(272, 10%, 45%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    align-items: center;
+
+    img {
+      max-width: 5.5rem;
+    }
+
+    button {
+      background: var(--c-primary);
+      color: white;
+      padding: 0.5rem;
+      border-radius: var(--br);
+      z-index: 20;
+    }
+
+    .ul-menu {
+      background: var(--c-primary);
+      padding: 0 2.5rem 0 1.5rem;
+
+      position: fixed;
+      top: 0%;
+      left: 0;
+      bottom: 0;
+      height: auto;
+      width: 100%;
+
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+
+      a {
+        text-decoration: none;
+        color: var(--c-light);
+        width: 100%;
+        font-weight: 500;
+        font-size: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &::after {
+          content: url(../../assets/pictures/chevron-right.svg);
+        }
+      }
+    }
+  }
+}
