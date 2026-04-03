@@ -47,8 +47,8 @@ const scrollRight = () => {
       </p>
 
       <div class="slider-wrapper">
-        <button class="nav prev" @click="scrollLeft">
-            <img
+        <button aria-label="Schuif de foto's naar links knop" class="nav prev" @click="scrollLeft">
+            <img alt=""
             src="../assets/pictures/chevron-left.svg"
           ></img>
         </button>
@@ -60,8 +60,8 @@ const scrollRight = () => {
           <img src="../assets/pictures/hero.png" alt="" />
         </div>
 
-        <button class="nav next" @click="scrollRight">
-          <img
+        <button aria-label="Schuif de foto's naar rechts knop" class="nav next" @click="scrollRight">
+          <img alt=""
             src="../assets/pictures/chevron-right.svg"
           ></img>
         </button>

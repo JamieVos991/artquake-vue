@@ -4,7 +4,7 @@ import "../assets/stylesheets/footer.css";
 
 <template>
   <footer>
-    <img src="../assets/pictures/logo.png" alt="" />
+    <img src="../assets/pictures/logo.png" alt="Logo van Artquake" />
     <p>
       Waar jongeren samen kunst creëren, elkaar inspireren, van elkaar leren en
       zichzelf zo verder kunnen ontwikkelen.

@@ -1,11 +1,48 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, watch } from "vue"; // Watch toegevoegd
+import { auth } from "../firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { useRouter } from "vue-router";
 import "../assets/stylesheets/nav.css";
 
 const isOpen = ref(false);
+const isLoggedIn = ref(false);
+const router = useRouter();
+
+// Check of de gebruiker is ingelogd
+onMounted(() => {
+  onAuthStateChanged(auth, (user) => {
+    isLoggedIn.value = !!user;
+  });
+});
+
+// Watcher om de rest van de pagina 'inert' te maken en scrollen te blokkeren
+watch(isOpen, (newValue) => {
+  const mainContent = document.querySelector("main"); // Of de div die je content bevat (bijv. #app)
+
+  if (newValue) {
+    document.body.style.overflow = "hidden";
+    // We zorgen dat alles BEHALVE de header/nav inert wordt
+    // Let op: je main content moet idealiter in een apart element zitten naast de header
+    if (mainContent) mainContent.setAttribute("inert", "");
+  } else {
+    document.body.style.overflow = "";
+    if (mainContent) mainContent.removeAttribute("inert");
+  }
+});
 
 const toggleMenu = () => {
   isOpen.value = !isOpen.value;
+};
+
+const handleLogout = async () => {
+  try {
+    await signOut(auth);
+    isOpen.value = false;
+    router.push("/login");
+  } catch (error) {
+    console.error("Fout bij uitloggen:", error);
+  }
 };
 </script>
 
@@ -15,7 +52,7 @@ const toggleMenu = () => {
       <a href="/">
         <img src="../assets/pictures/logo.png" alt="Logo van Artquake" />
       </a>
-      <button @click="toggleMenu">
+      <button @click="toggleMenu" :aria-expanded="isOpen">
         <svg
           v-if="!isOpen"
           aria-label="Open het menu"
@@ -57,13 +94,52 @@ const toggleMenu = () => {
       </button>
 
       <ul v-if="isOpen" class="ul-menu">
-        <li><a href="/">Home</a></li>
-        <li><a href="/organisatie">Organisatie</a></li>
-        <li><a href="/artiesten">Artiesten</a></li>
-        <li><a href="/crew">Crew</a></li>
-        <li><a href="/agenda">Agenda</a></li>
-        <li><a href="/activiteiten">Activiteiten</a></li>
-        <li><a href="/reserveren">Reserveren</a></li>
+        <li><router-link to="/" @click="isOpen = false">Home</router-link></li>
+        <li>
+          <router-link to="/organisatie" @click="isOpen = false"
+            >Organisatie</router-link
+          >
+        </li>
+        <li>
+          <router-link to="/artiesten" @click="isOpen = false"
+            >Artiesten</router-link
+          >
+        </li>
+        <li>
+          <router-link to="/crew" @click="isOpen = false">Crew</router-link>
+        </li>
+        <li>
+          <router-link to="/agenda" @click="isOpen = false">Agenda</router-link>
+        </li>
+        <li>
+          <router-link to="/activiteiten" @click="isOpen = false"
+            >Activiteiten</router-link
+          >
+        </li>
+        <li>
+          <router-link to="/reserveren" @click="isOpen = false"
+            >Reserveren</router-link
+          >
+        </li>
+        <li>
+          <a href="https://www.instagram.com/artquake.westfriesland/"
+            >Instagram</a
+          >
+          <a
+            href="/"
+            style="cursor: pointer"
+            v-if="isLoggedIn"
+            @click="handleLogout"
+            >Uitloggen</a
+          >
+          <router-link v-else to="/Login" @click="isOpen = false"
+            >Login</router-link
+          >
+          <a v-if="isLoggedIn" href="/dashboard">Dashboard</a>
+          <a href="https://www.facebook.com/artquake.westfriesland/"
+            >Facebook</a
+          >
+        </li>
       </ul>
     </nav>
   </header>

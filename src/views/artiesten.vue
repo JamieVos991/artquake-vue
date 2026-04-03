@@ -4,11 +4,12 @@
   <main>
     <section>
       <label class="label" for="">Artiesten</label>
-      <h2 class="h2-font">De mensen die ideeën tot leven brengt.</h2>
+      <h2 class="h2-font">Voorbeeld titel tekst tekst tekst tekst</h2>
       <p>
-        De crew is het hart van het team. Samen werken ze hard, helpen ze elkaar
-        en zorgen ze dat alles soepel verloopt. Door teamwork en inzet maken ze
-        ideeën werkelijkheid.
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores ad
+        quibusdam commodi ab deserunt neque voluptatum pariatur aut, libero ex
+        molestiae unde nostrum repellendus voluptatem quos quod magnam in
+        tempore.
       </p>
     </section>
   </main>

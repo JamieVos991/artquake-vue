@@ -2,28 +2,8 @@
 import { ref, computed, watch } from "vue";
 import emailjs from "@emailjs/browser";
 import { initializeApp } from "firebase/app";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
-
-// --- Firebase config (Ongewijzigd) ---
-const firebaseConfig = {
-  apiKey: "AIzaSyDlmqdPTEsJOcbwbjL1Luy51CnE52slGfo",
-  authDomain: "artquake-6fceb.firebaseapp.com",
-  projectId: "artquake-6fceb",
-  storageBucket: "artquake-6fceb.firebasestorage.app",
-  messagingSenderId: "202630612295",
-  appId: "1:202630612295:web:68bcc60a9cb14425f07862",
-  measurementId: "G-N5F8LC5D7V",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
 const form = ref({
   name: "",
@@ -38,7 +18,6 @@ const form = ref({
 const loading = ref(false);
 const reservedPeriods = ref([]);
 
-// --- Generate tijden ---
 function generateTimes() {
   const times = [];
   let hour = 8,
@@ -57,7 +36,6 @@ function generateTimes() {
 }
 const allTimes = generateTimes();
 
-// --- Datum helpers ---
 const pad = (n) => String(n).padStart(2, "0");
 const today = new Date();
 const minDate = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(
@@ -86,7 +64,6 @@ watch([() => form.value.date, () => form.value.studio], async () => {
   form.value.endTime = "";
 });
 
-// --- Helper om te checken of een tijdstip in het verleden ligt (vandaag) ---
 function isPastTime(t) {
   if (form.value.date !== minDate) return false;
   const [h, m] = t.split(":").map(Number);
@@ -94,8 +71,6 @@ function isPastTime(t) {
   return h * 60 + m <= now.getHours() * 60 + now.getMinutes();
 }
 
-// --- Start tijden: Toon alles, disable gereserveerd of verleden ---
-// --- Start tijden: Toon alles, markeer gereserveerd/verleden ---
 const startTimes = computed(() => {
   return allTimes.map((t) => {
     const isReserved = reservedPeriods.value.some(
@@ -108,13 +83,11 @@ const startTimes = computed(() => {
   });
 });
 
-// --- End tijden: Verwijder onmogelijke opties, laat alleen aansluitende blokken zien ---
 const endTimes = computed(() => {
   if (!form.value.startTime) return [];
 
   const availableEndTimes = [];
 
-  // Zoek de eerstvolgende starttijd van een bestaande reservering na de gekozen starttijd
   const nextReservation = reservedPeriods.value
     .filter((p) => p.start > form.value.startTime)
     .sort((a, b) => a.start.localeCompare(b.start))[0];
@@ -122,13 +95,10 @@ const endTimes = computed(() => {
   const limitTime = nextReservation ? nextReservation.start : "23:59";
 
   for (const t of allTimes) {
-    // 1. Tijd moet na de starttijd liggen
     if (t <= form.value.startTime) continue;
 
-    // 2. Tijd mag niet verder gaan dan het begin van de volgende reservering
     if (t > limitTime) break;
 
-    // 3. Controleer of de tijd zelf in een reservering valt (voor de zekerheid)
     const isInsideReserved = reservedPeriods.value.some(
       (p) => t > p.start && t <= p.end
     );
@@ -232,7 +202,13 @@ const handleSubmit = async () => {
             <option>Kleine Theaterzaal</option>
           </select>
           <label>Datum</label>
-          <input v-model="form.date" type="date" :min="minDate" required />
+          <input
+            v-model="form.date"
+            type="date"
+            :min="minDate"
+            @click="$event.target.showPicker()"
+            required
+          />
         </fieldset>
 
         <fieldset>
@@ -273,13 +249,15 @@ const handleSubmit = async () => {
 
         <input v-model="form.company" type="text" style="display: none" />
 
-        <button type="submit">{{ loading ? "Bezig..." : "Reserveer" }}</button>
+        <button class="btn" type="submit">
+          {{ loading ? "Bezig..." : "Reserveer" }}
+        </button>
       </form>
     </section>
   </main>
 </template>
 
-<style>
+<style scoped>
 .reserveren-section {
   background: #222831;
   height: 8rem;
@@ -291,9 +269,6 @@ const handleSubmit = async () => {
   small {
     margin-bottom: 0.7rem;
   }
-}
-
-input {
 }
 
 .loading-overlay {
@@ -338,67 +313,9 @@ input {
   }
 }
 
-form {
-  color: black;
-  display: grid;
-  color: #cacaca;
-  border: 1px solid grey;
-  gap: 2rem;
-  border-radius: var(--border-radius);
-  padding: 1rem;
-
-  fieldset {
-    padding: 1rem;
-    display: grid;
-    gap: 1rem;
-    border: none;
-
-    legend {
-      font-size: 1.1rem;
-    }
-
-    label {
-      position: relative;
-      width: max-content;
-
-      &::after {
-        content: "*";
-        color: #c00707;
-        font-size: 0.9rem;
-        position: absolute;
-        right: -15px;
-        top: 0px;
-      }
-    }
-
-    input,
-    select {
-      padding: 0.8rem 0.5rem;
-      color: #cacaca;
-      border: none;
-      background: #232323;
-    }
-
-    input[type="date"]::-webkit-calendar-picker-indicator {
-      filter: invert(85%) sepia(6%) saturate(22%) hue-rotate(321deg)
-        brightness(95%) contrast(88%);
-      cursor: pointer;
-    }
-
-    select {
-      /* Stap 1: Verwijder de standaard browser-pijl */
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-
-      /* Stap 3: Voeg een eigen pijltje toe via een achtergrond-afbeelding */
-      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23cacaca%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C/polyline%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-
-      /* Stap 4: Positioneer je eigen pijltje exact waar je wilt t.o.v. de rand */
-      background-position: right 15px top 50%;
-      background-size: 20px auto;
-    }
-  }
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(85%) sepia(6%) saturate(22%) hue-rotate(321deg) brightness(95%)
+    contrast(88%);
+  cursor: pointer;
 }
 </style>

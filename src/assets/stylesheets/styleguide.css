@@ -19,10 +19,12 @@
   --c-secondary: hsl(38, 83%, 47%);
   --c-tertiary: hsl(204, 88%, 42%);
   --c-light: hsl(0, 0%, 100%);
-  --c-bg: hsl(0, 0%, 0%);
+  --c-bg: hsl(0, 0%, 5%);
   --c-bg-alt: hsl(0, 0%, 13%);
+  --c-grey: rgb(152, 152, 152);
   --c-pseudo: hsl(0, 0%, 9%);
   --c-input: hsl(0, 0%, 14%);
+  --c-required: hsl(0, 93%, 39%);
   --c-anchor: hsl(240, 69%, 77%);
 
   --f-size-h1: clamp(2rem, 15vw, 8rem);
@@ -52,7 +54,7 @@ body {
 }
 
 main {
-  padding-top: calc(5rem + 40px);
+  padding-top: calc(5rem + 20px);
 }
 
 .main-home {
@@ -98,6 +100,56 @@ h2:before {
   position: absolute;
   z-index: -1;
   top: -5rem;
+}
+
+form {
+  color: var(--c-bg);
+  border: 1px solid var(--c-grey);
+  color: var(--c-light);
+  border-radius: var(--br);
+
+  display: grid;
+  gap: 2rem;
+  padding: 2rem;
+
+  fieldset {
+    display: grid;
+    gap: 1rem;
+    border: none;
+
+    legend {
+      padding-bottom: 1rem;
+      font-size: var(--f-size-p);
+    }
+
+    label {
+      &::after {
+        content: "*";
+        margin-left: 0.4rem;
+        color: var(--c-required);
+      }
+    }
+  }
+}
+
+input,
+select {
+  padding: 0.8rem 0.5rem;
+  color: #cacaca;
+  border: none;
+  background: #232323;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23cacaca%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+
+  background-position: right 15px top 50%;
+  background-size: 20px auto;
 }
 
 .h1-font {
