@@ -7,7 +7,7 @@ header {
     top: 15px;
     border-radius: var(--br);
     z-index: 10;
-    background-color: hsl(272, 10%, 45%);
+    background-color: hsl(272, 10%, 45%, 0.6);
     display: flex;
     justify-content: space-between;
     padding: 0 1rem;

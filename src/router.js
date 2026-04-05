@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { auth } from './firebase' // Let op: zorg dat dit pad naar je firebase config wijst!
+import { auth } from './firebase' 
 import { onAuthStateChanged } from "firebase/auth"
 
 // Importeer je views
@@ -29,19 +29,25 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
-    meta: { requiresAuth: true } // Beveiligd!
+    meta: { requiresAuth: true }
   },
-  // Catch-all route voor 404 meldingen binnen Vue
   { path: '/:pathMatch(.*)*', name: 'NotFoundPagina', component: NotFoundPagina },
 ]
 
 const router = createRouter({
-  // BELANGRIJK: Gebruik createWebHashHistory voor GitHub Pages om 404's bij refresh te voorkomen
   history: createWebHashHistory('/artquake-vue/'),
-  routes
+  routes,
+  // DIT IS DE FIX: Zorgt dat je altijd bovenaan de pagina begint
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { top: 0 };
+    }
+  },
 })
 
-// Helper functie om de huidige Firebase gebruiker op te halen
+// Helper functie voor Firebase
 const getCurrentUser = () => {
   return new Promise((resolve, reject) => {
     const removeListener = onAuthStateChanged(
@@ -55,7 +61,7 @@ const getCurrentUser = () => {
   });
 };
 
-// Navigation Guard voor beveiligde routes
+// Navigation Guard
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     const user = await getCurrentUser();
