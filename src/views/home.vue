@@ -23,12 +23,17 @@ const scrollRight = () => {
 <template>
   <main class="main-home">
     <section>
+      <article >
+        
+      </article>
+      <article>
       <h1 class="h1-font"><em>ART</em>QUAKE</h1>
       <p>
         Waar jongeren samen kunst creëren, elkaar inspireren, van elkaar leren
         en zichzelf zo verder kunnen ontwikkelen.
       </p>
       <a href="/artiesten" class="btn">Bekijk de artiesten</a>
+    </article>
     </section>
     <section>
       <h2 class="h2-font">Stichting Villa <em>Artquake</em></h2>
@@ -116,10 +121,33 @@ section {
     background-size: cover;
     background-position: center;
 
+    article:nth-of-type(1) {
+      display: none;
+    }
+
+    article:nth-of-type(2) {
+      z-index: 10;
+            gap: 1.5rem;
+            display: grid;
+    }
+
+
+    @media (min-width: 900px) {
+      place-content: center;
+      justify-content: center;
+      text-align: center;
+
+    }
+
     h1,
     p,
     a {
       z-index: 2;
+
+      @media (min-width: 900px) {
+      justify-self: center;
+
+      }
     }
 
     &::after {
@@ -182,7 +210,7 @@ section {
       transform: translateY(-50%);
       border: none;
       font-size: 2rem;
-      padding: 0.5rem 1rem;
+      padding: 0.5rem .8rem;
       cursor: pointer;
       opacity: .9;
       z-index: 5;

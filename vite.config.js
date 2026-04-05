@@ -9,6 +9,7 @@ export default defineConfig({
     vue(),
     // vueDevTools(),
   ],
+  base: '/artquake-vue/', // Vervang dit door de naam van je repo op GitHub!
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

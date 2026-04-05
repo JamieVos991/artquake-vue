@@ -1,14 +1,46 @@
 <script setup>
-import { auth } from "../firebase";
+import { ref, onMounted } from "vue";
+import { auth, db } from "../firebase"; // Zorg dat 'db' geëxporteerd is uit je firebase config
+import { collection, getDocs } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+const reservations = ref([]); // Hier slaan we de data op
+
+const fetchReservations = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, "reservations"));
+    reservations.value = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+  } catch (error) {
+    console.error("Fout bij ophalen reservaties:", error);
+  }
+};
+
+onMounted(() => {
+  fetchReservations();
+});
+
+const formatDate = (timestamp) => {
+  if (!timestamp) return "Onbekend";
+
+  const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+
+  return date.toLocaleString("nl-NL", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
 
 const handleLogout = async () => {
   try {
     await signOut(auth);
-    console.log("Succesvol uitgelogd");
     router.push("/login");
   } catch (error) {
     console.error("Fout bij uitloggen:", error);
@@ -52,6 +84,30 @@ const handleLogout = async () => {
         </fieldset>
       </form>
       <h3>Reservaties</h3>
+
+      <table v-if="reservations.length > 0">
+        <thead>
+          <tr>
+            <th scope="col">Naam</th>
+            <th scope="col">Studio</th>
+            <th scope="col">Start tijd</th>
+            <th scope="col">Eind tijd</th>
+            <th scope="col">Datum</th>
+            <th scope="col">Gemaakt op</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="res in reservations" :key="res.id">
+            <td data-label="Naam">{{ res.name }}</td>
+            <td data-label="Studio">{{ res.studio }}</td>
+            <td data-label="Start tijd">{{ res.startTime }}</td>
+            <td data-label="Eind tijd">{{ res.endTime }}</td>
+            <td data-label="Datum">{{ res.date }}</td>
+            <td data-label="Gemaakt op">{{ formatDate(res.createdAt) }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p v-else>Er zijn momenteel geen reservaties gevonden.</p>
     </section>
   </main>
 </template>
@@ -59,5 +115,58 @@ const handleLogout = async () => {
 <style scoped>
 select {
   margin-bottom: 1rem;
+}
+
+table {
+  border-radius: var(--br);
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table tr {
+}
+
+table th,
+table td {
+  padding: 0.625em;
+  border: 1px solid var(--c-grey);
+  text-align: center;
+}
+
+table th {
+  letter-spacing: 0.1em;
+}
+
+@media screen and (max-width: 600px) {
+  table thead {
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  table tr {
+    display: block;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 19rem;
+  }
+
+  table td {
+    display: block;
+    text-align: right;
+  }
+
+  table td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+  }
 }
 </style>

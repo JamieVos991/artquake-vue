@@ -84,6 +84,7 @@ p {
   line-height: var(--lh-p);
   font-family: var(--f-family-gillsans);
   font-size: var(--f-size-p);
+  max-width: 35rem;
 }
 
 h1,
@@ -136,6 +137,8 @@ input,
 select {
   padding: 0.8rem 0.5rem;
   color: #cacaca;
+  width: 100%;
+
   border: none;
   background: #232323;
 }
