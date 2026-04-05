@@ -116,17 +116,10 @@ section {
     background-size: cover;
     background-position: center;
 
-    @media (min-width: 900px) {
-      place-content: center;
-      justify-content: center;
-      text-align: center;
-    }
-
     h1,
     p,
     a {
       z-index: 2;
-      justify-self: center;
     }
 
     &::after {
