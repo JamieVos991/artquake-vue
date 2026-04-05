@@ -8,12 +8,12 @@
 
 @font-face {
   font-family: "Tanker";
-  src: url("./fonts/Tanker/OTF/Tanker-Regular.otf") format("opentype");
+  src: url("/artquake-vue/fonts/Tanker/OTF/Tanker-Regular.otf")
+    format("opentype");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
 }
-
 :root {
   --c-primary: hsl(272, 84%, 45%);
   --c-secondary: hsl(38, 83%, 47%);
@@ -84,7 +84,7 @@ p {
   line-height: var(--lh-p);
   font-family: var(--f-family-gillsans);
   font-size: var(--f-size-p);
-  max-width: 35rem;
+  max-width: 35r2em;
 }
 
 h1,
