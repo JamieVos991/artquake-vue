@@ -47,10 +47,6 @@
   --t-4: "BUILD";
 }
 
-html {
-  scroll-padding-top: 100px;
-}
-
 body {
   color: var(--c-light);
   background: var(--c-bg);
@@ -62,7 +58,7 @@ main {
 }
 
 .main-home {
-  padding-top: calc(1rem + 0px);
+  padding-top: calc(3rem + 15px);
 }
 
 section {
