@@ -14,6 +14,8 @@ import Login from './views/login.vue'
 import Dashboard from './views/dashboard.vue'
 import Artiesten from './views/artiesten.vue'
 import Contact from './views/contact.vue'
+import Privacypolicy from './views/privacypolicy.vue'
+import Termsandconditions from './views/termsandconditions.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -25,6 +27,8 @@ const routes = [
   { path: '/reserveren', name: 'Reserveren', component: Reserveren },
   { path: '/login', name: 'Login', component: Login },
   { path: '/contact', name: 'Contact', component: Contact},
+  { path: '/privacypolicy', name: 'Privacy Policy', component: Privacypolicy},
+  { path: '/termsandconditions', name: 'Terms & Conditions', component: Termsandconditions},
   {
     path: '/dashboard',
     name: 'Dashboard',

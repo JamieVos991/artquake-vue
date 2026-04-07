@@ -76,7 +76,6 @@ const scrollRight = () => {
       <video
         src="https://art-quake.com/wp-content/uploads/2024/02/artquake.mp4"
         controls
-        autoplay
         poster="../assets/pictures/hero.png"
         preload="metadata"
         muted
@@ -106,6 +105,10 @@ section {
   place-content: center;
   justify-content: left;
 
+  @media (min-width: 900px){
+    place-content: center;
+  }
+
   &:nth-of-type(even) {
     background: var(--c-bg-alt);
   }
@@ -116,10 +119,33 @@ section {
     background-size: cover;
     background-position: center;
 
+    @media (min-width: 900px) {
+      place-content: center;
+      text-align: center;
+    }
+
     h1,
     p,
     a {
       z-index: 2;
+      opacity: 0; 
+      animation: fadeInUp 0.8s ease-out forwards;
+
+      @media (min-width: 900px) {
+        justify-self: center;
+      }
+    }
+
+    h1 {
+      animation-delay: 0.2s;
+    }
+
+    p {
+      animation-delay: 0.4s;
+    }
+
+    a {
+      animation-delay: 0.6s;
     }
 
     &::after {
@@ -211,6 +237,17 @@ section {
     h2:before {
       content: var(--t-4);
     }
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>

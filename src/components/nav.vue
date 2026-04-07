@@ -93,7 +93,7 @@ const handleLogout = async () => {
         </svg>
       </button>
 
-      <ul v-if="isOpen" class="ul-menu">
+      <ul :class="['ul-menu', { 'is-open': isOpen }]">
         <li><router-link to="/" @click="isOpen = false">Home</router-link></li>
         <li>
           <router-link to="/organisatie" @click="isOpen = false"
