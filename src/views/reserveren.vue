@@ -4,6 +4,7 @@ import emailjs from "@emailjs/browser";
 import { initializeApp } from "firebase/app";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
+import Spinner from "../components/spinner.vue";
 
 const form = ref({
   name: "",
@@ -146,7 +147,7 @@ const handleSubmit = async () => {
       createdAt: new Date(),
     });
 
-    alert("Reservering verstuurd! 📩");
+    alert("Reservering verstuurd, er wordt een bevestings mail gestuurd.");
     form.value = {
       name: "",
       email: "",
@@ -168,6 +169,10 @@ const handleSubmit = async () => {
 
 <template>
   <main>
+    <div v-if="loading" class="loading-overlay">
+      <div class="loader-content"><Spinner label="Ogenblik geduld..."" /></div>
+    </div>
+
     <section>
       <label class="label" for="">Reserveren</label>
       <h2 class="h2-font">Reserveer hier jouw studio.</h2>
@@ -175,6 +180,7 @@ const handleSubmit = async () => {
         Jouw creativiteit verdient een plek. Kies een studio, check de
         beschikbaarheid en leg je tijdslot direct vast.
       </p>
+
       <form @submit.prevent="handleSubmit">
         <fieldset>
           <legend>
@@ -244,14 +250,14 @@ const handleSubmit = async () => {
             </option>
           </select>
 
-          <p v-if="duration">{{ duration }}</p>
+          <p v-if="duration" class="duration-text">
+            Totale duur: {{ duration }}
+          </p>
         </fieldset>
 
         <input v-model="form.company" type="text" style="display: none" />
 
-        <button class="btn" type="submit">
-          {{ loading ? "Bezig..." : "Reserveer" }}
-        </button>
+        <button class="btn" type="submit" :disabled="loading">Reserveer</button>
       </form>
     </section>
   </main>
@@ -268,48 +274,6 @@ const handleSubmit = async () => {
 
   small {
     margin-bottom: 0.7rem;
-  }
-}
-
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.85); /* Donkere achtergrond */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000; /* Zorg dat het overal bovenop ligt */
-  color: white;
-  font-family: "Jost", sans-serif;
-}
-
-.loading-overlay.hidden {
-  display: none !important;
-}
-
-.loader-content {
-  text-align: center;
-}
-
-.spinner-circle {
-  width: 60px;
-  height: 60px;
-  border: 6px solid rgba(255, 255, 255, 0.2);
-  border-top: 6px solid var(--secundaire-kleur); /* Jouw oranje kleur */
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 1.5rem;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
   }
 }
 

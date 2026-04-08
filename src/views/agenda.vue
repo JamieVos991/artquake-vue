@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { db } from "../firebase";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import Spinner from "../components/spinner.vue";
 
 const events = ref([]);
 const isLoading = ref(true); // Start op true
@@ -41,10 +42,7 @@ const formatDisplayDate = (dateStr) => {
         inhoud per activiteit en het laatste nieuws!
       </p>
 
-      <div v-if="isLoading" class="loader-container">
-        <div class="spinner"></div>
-        <p>Events laden...</p>
-      </div>
+      <Spinner v-if="isLoading" label="Events ophalen..." />
 
       <ul v-else-if="events.length > 0">
         <li
@@ -59,7 +57,7 @@ const formatDisplayDate = (dateStr) => {
           <p>{{ event.band }}</p>
           <p>{{ event.place }}</p>
           <p>{{ event.startTime }} - {{ event.endTime }}</p>
-          <p>{{ event.type }}</p>
+          <!-- <p>{{ event.type }}</p> -->
           <div></div>
         </li>
       </ul>
@@ -73,46 +71,27 @@ const formatDisplayDate = (dateStr) => {
 section {
   padding-bottom: 3rem;
 }
-/* Spinner Styles */
-.loader-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem;
-  gap: 1rem;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(255, 255, 255, 0.1);
-  border-left-color: white; /* Of je accentkleur */
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 /* Je bestaande styles */
 li {
   background-image: var(--band-image);
   background-size: cover;
   border-radius: var(--br);
-  padding: 1.5rem 1rem 1rem 1rem;
+  padding: 1.5rem 1.5rem 1.5rem 1.5rem;
   min-height: 10rem;
   margin-top: 4rem;
   position: relative;
-  display: grid;
-  gap: 0.5rem;
-  grid-template-areas:
+  /* display: grid; */
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-transform: uppercase;
+  z-index: 0;
+  /* grid-template-areas:
     "band band band"
     "place place place"
-    "time time type";
+    "time time type"; */
 
   &::before {
     content: var(--band-date);
@@ -139,8 +118,12 @@ li {
     top: 0;
     right: 0;
     left: 0;
+    z-index: 0;
     bottom: 0;
     position: absolute;
+    border: 6px solid var(--c-secondary);
+    inset: 0;
+    border-radius: var(--br);
   }
 
   img {
@@ -151,17 +134,19 @@ li {
   }
 
   p {
-    z-index: 3;
+    z-index: 10;
     font-size: 1.2rem;
   }
 
   p:nth-of-type(1) {
     grid-area: band;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     font-weight: 700;
   }
   p:nth-of-type(2) {
     grid-area: place;
+    font-weight: 100;
+    font-size: 1.1rem;
   }
   p:nth-of-type(3) {
     grid-area: time;
