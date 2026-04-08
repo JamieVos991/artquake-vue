@@ -276,10 +276,4 @@ const handleSubmit = async () => {
     margin-bottom: 0.7rem;
   }
 }
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(85%) sepia(6%) saturate(22%) hue-rotate(321deg) brightness(95%)
-    contrast(88%);
-  cursor: pointer;
-}
 </style>

@@ -155,6 +155,12 @@ select {
   background-size: 20px auto;
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(85%) sepia(6%) saturate(22%) hue-rotate(321deg) brightness(95%)
+    contrast(88%);
+  cursor: pointer;
+}
+
 .h1-font {
   font-size: var(--f-size-h1);
   font-weight: 800;

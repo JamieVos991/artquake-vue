@@ -13,14 +13,13 @@ import {
 } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { useRouter } from "vue-router";
+import Spinner from "../components/spinner.vue";
 
 const router = useRouter();
 
-// State
 const reservations = ref([]);
-const agendaItems = ref([]); // Nieuwe lijst voor agenda items
+const agendaItems = ref([]);
 
-// Formulier data voor nieuwe events
 const agendaForm = ref({
   band: "",
   place: "",
@@ -31,7 +30,6 @@ const agendaForm = ref({
   imageUrl: "",
 });
 
-// Ophalen van reservaties
 const fetchReservations = async () => {
   try {
     const querySnapshot = await getDocs(collection(db, "reservations"));
@@ -44,7 +42,6 @@ const fetchReservations = async () => {
   }
 };
 
-// Ophalen van agenda items
 const fetchAgendaItems = async () => {
   try {
     const q = query(collection(db, "agenda"), orderBy("date", "asc"));
@@ -58,7 +55,6 @@ const fetchAgendaItems = async () => {
   }
 };
 
-// Agenda item toevoegen
 const addAgendaItem = async () => {
   try {
     await addDoc(collection(db, "agenda"), {
@@ -66,7 +62,6 @@ const addAgendaItem = async () => {
       createdAt: serverTimestamp(),
     });
 
-    // Reset formulier
     agendaForm.value = {
       band: "",
       place: "",
@@ -78,7 +73,7 @@ const addAgendaItem = async () => {
     };
 
     alert("Event succesvol toegevoegd!");
-    fetchAgendaItems(); // Ververs de lijst direct
+    fetchAgendaItems();
   } catch (error) {
     console.error("Fout bij toevoegen event:", error);
   }
@@ -166,7 +161,13 @@ const formatDate = (timestamp) => {
           />
 
           <label for="date">Datum</label>
-          <input v-model="agendaForm.date" type="date" id="date" required />
+          <input
+            @click="$event.target.showPicker()"
+            v-model="agendaForm.date"
+            type="date"
+            id="date"
+            required
+          />
 
           <label for="start_time">Start tijd</label>
           <input v-model="agendaForm.startTime" type="time" required />
@@ -190,28 +191,19 @@ const formatDate = (timestamp) => {
       </form>
 
       <h3>Bestaande Agenda Items</h3>
-      <table v-if="agendaItems.length > 0">
-        <thead>
-          <tr>
-            <th>Band</th>
-            <th>Datum</th>
-            <th>Acties</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in agendaItems" :key="item.id">
-            <td data-label="Band">
-              <strong>{{ item.band }}</strong>
-            </td>
-            <td data-label="Datum">{{ item.date }}</td>
-            <td data-label="Acties">
-              <button @click="deleteAgendaItem(item.id)" class="btn-delete">
-                Verwijder
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-if="agendaItems.length > 0">
+        <div v-for="item in agendaItems" :key="item.id">
+          <div data-label="Band">
+            <strong>{{ item.band }}</strong>
+          </div>
+          <div data-label="Datum">{{ item.date }}</div>
+          <div data-label="Acties">
+            <button @click="deleteAgendaItem(item.id)" class="btn-delete">
+              Verwijder
+            </button>
+          </div>
+        </div>
+      </div>
       <p v-else>Geen agenda items gevonden.</p>
 
       <h3>Reservaties</h3>
@@ -291,12 +283,14 @@ table td {
     margin-bottom: 1rem;
     border: 1px solid var(--c-grey);
   }
+
   table td {
     display: block;
     text-align: right;
     position: relative;
     padding-left: 50%;
   }
+
   table td::before {
     content: attr(data-label);
     position: absolute;

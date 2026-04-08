@@ -4,15 +4,21 @@
   <main>
     <section>
       <label class="label" for="">Artiesten</label>
-      <h2 class="h2-font">Voorbeeld titel tekst tekst tekst tekst</h2>
+      <h2 class="h2-font">De makers van nu.</h2>
       <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores ad
-        quibusdam commodi ab deserunt neque voluptatum pariatur aut, libero ex
-        molestiae unde nostrum repellendus voluptatem quos quod magnam in
-        tempore.
+        Artquake bestaat uit talloze getalenteerde artiesten, die zowel op het
+        podium staan als hun kunst tonen via exposities. Op deze pagina kun je
+        onze artiesten vinden en meer over ze te weten komen
+        <br />
+        <br />
+        Op zoek naar jong, aanstormend talent voor een optreden, evenement,
+        festival, feest of andere bijzondere gelegenheid, neem contact met ons
+        op!
       </p>
       <select name="" id="">
-        <option value="">asd</option>
+        <option value="">Alle</option>
+        <option value="">Podium</option>
+        <option value="">Expo</option>
       </select>
     </section>
 
@@ -63,9 +69,10 @@
 <style scoped>
 section:nth-of-type(2) {
   width: 100%;
-  display: grid;
+  display: flex;
   place-content: center;
   gap: 4rem;
+  flex-wrap: wrap;
 }
 
 article {
@@ -74,9 +81,10 @@ article {
   gap: 0.5rem;
 
   img {
-    width: 15rem;
+    width: 100%;
     object-fit: cover;
     aspect-ratio: 1/1;
+    max-width: 25rem;
     border-radius: var(--br);
   }
 }
