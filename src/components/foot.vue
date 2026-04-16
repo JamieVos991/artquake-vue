@@ -10,8 +10,8 @@ import "../assets/stylesheets/footer.css";
       zichzelf zo verder kunnen ontwikkelen.
     </p>
     <address>
-      <a href="">artquake@gmail.com</a>
-      <a href="">+31 6 12121212</a>
+      <a href="">info@art-quake.com</a>
+      <a href="">+31 6 40129447</a>
       <p>Sara de Bronóvoland 11, Heerhugowaard</p>
     </address>
     <iframe

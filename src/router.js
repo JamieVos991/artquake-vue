@@ -33,7 +33,7 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
-    meta: { requiresAuth: true }
+    // meta: { requiresAuth: true }
   },
   { path: '/:pathMatch(.*)*', name: 'NotFoundPagina', component: NotFoundPagina },
 ]

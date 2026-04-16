@@ -1,4 +1,12 @@
 header {
+  img {
+    max-width: 8rem;
+    position: absolute;
+    z-index: 1;
+    top: 1.5rem;
+    left: 1.5rem;
+  }
+
   nav {
     height: 5rem;
     position: fixed;
@@ -7,18 +15,12 @@ header {
     top: 15px;
     border-radius: var(--br);
     z-index: 10;
-    background-color: hsl(272, 10%, 45%, 0.6);
+    /* background-color: hsl(272, 10%, 45%, 0.6); */
     display: flex;
-    justify-content: space-between;
+    justify-content: right;
     padding: 0 1rem;
     align-items: center;
-    backdrop-filter: blur(
-      10px
-    ); /* Optioneel: maakt de transparante achtergrond mooier */
-
-    img {
-      max-width: 5.5rem;
-    }
+    backdrop-filter: blur(0);
 
     button {
       background: var(--c-primary);
@@ -31,25 +33,30 @@ header {
     }
 
     .ul-menu {
-      /* Mobiel: standaard verborgen */
-      display: none;
-
+      /* Basis instellingen */
       background: var(--c-primary);
       padding: 0 2.5rem 0 1.5rem;
       position: fixed;
-      top: -15px;
+      top: -15px; /* Behoudt je huidige offset */
       left: -15px;
-      bottom: 0;
       height: 100vh;
       width: 100vw;
       list-style: none;
+      display: flex; /* Altijd flex, we verplaatsen hem alleen */
       flex-direction: column;
       justify-content: center;
       gap: 1rem;
 
-      /* Toon menu als isOpen true is op mobiel */
+      /* De animatie magie */
+      transform: translateX(
+        100%
+      ); /* Schuif hem volledig naar links uit beeld */
+      transition: transform 0.4s ease-in-out; /* Bepaalt de snelheid en vloeiendheid */
+      z-index: 15;
+
+      /* Wanneer isOpen true is (is-open class toegevoegd) */
       &.is-open {
-        display: flex;
+        transform: translateX(0); /* Schuif terug naar de originele positie */
       }
 
       li:last-of-type {
@@ -79,10 +86,6 @@ header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-
-        &::after {
-          content: url(../../assets/pictures/chevron-right.svg);
-        }
       }
     }
   }
