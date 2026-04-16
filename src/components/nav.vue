@@ -122,9 +122,6 @@ const handleLogout = async () => {
           >
         </li>
         <li>
-          <a href="https://www.instagram.com/artquake.westfriesland/"
-            >Instagram</a
-          >
           <a
             href="/"
             style="cursor: pointer"
@@ -136,9 +133,6 @@ const handleLogout = async () => {
             >Login</router-link
           >
           <a v-if="isLoggedIn" href="/dashboard">Dashboard</a>
-          <a href="https://www.facebook.com/artquake.westfriesland/"
-            >Facebook</a
-          >
         </li>
       </ul>
     </nav>
