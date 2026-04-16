@@ -1,35 +1,45 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 
-const slider = ref(null);
+const heroImages = ['hero.png', 'hero-2.jpg', 'hero-3.jpg', 'hero-4.jpg', 'hero-5.jpeg', 'hero-6.jpeg'];
+const currentIndex = ref(0);
+const showImage = ref(true); 
 
-const scrollAmount = 300;
+let intervalId = null;
 
-const scrollLeft = () => {
-  slider.value.scrollBy({
-    left: -scrollAmount,
-    behavior: "smooth",
-  });
+const getHeroImageUrl = (name) => {
+  return new URL(`../assets/pictures/${name}`, import.meta.url).href;
 };
 
-const scrollRight = () => {
-  slider.value.scrollBy({
-    left: scrollAmount,
-    behavior: "smooth",
-  });
-};
+onMounted(() => {
+  intervalId = setInterval(() => {
+    showImage.value = false; // Start fade out
+    
+    setTimeout(() => {
+      currentIndex.value = (currentIndex.value + 1) % heroImages.length;
+      showImage.value = true; // Start fade in met nieuwe foto
+    }, 600); // Wacht tot de fade-out klaar is (match met CSS tijd)
+  }, 3000);
+});;
+
+onUnmounted(() => {
+  // Stop de timer als de component wordt verlaten om geheugenlekken te voorkomen
+  if (intervalId) clearInterval(intervalId);
+});
 </script>
 
 <template>
   <main class="main-home">
-    <section>
-      <h1 class="h1-font"><em>ART</em>QUAKE</h1>
-      <p>
-        Waar jongeren samen kunst creëren, elkaar inspireren, van elkaar leren
-        en zichzelf zo verder kunnen ontwikkelen.
-      </p>
-      <a href="/artiesten" class="btn">Bekijk de artiesten</a>
-    </section>
+    <section 
+  :style="{ backgroundImage: `url(${getHeroImageUrl(heroImages[currentIndex])})` }"
+        >
+          <h1 class="h1-font"><em>ART</em>QUAKE</h1>
+          <p>
+            Waar jongeren samen kunst creëren, elkaar inspireren, van elkaar leren
+            en zichzelf zo verder kunnen ontwikkelen.
+          </p>
+          <a href="/artiesten" class="btn">Bekijk de artiesten</a>
+        </section>
     <section>
       <h2 class="h2-font">Stichting Villa <em>Artquake</em></h2>
       <p>
@@ -149,7 +159,7 @@ section {
     }
 
     &::after {
-      background: hsla(0, 0%, 0%, 0.8);
+      background: hsla(0, 0%, 0%, 0.6);
       height: 100%;
       width: 100%;
       content: "";
