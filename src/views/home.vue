@@ -1,47 +1,63 @@
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
-const heroImages = ['hero.png', 'hero-2.jpg', 'hero-3.jpg', 'hero-4.jpg', 'hero-5.jpeg', 'hero-6.jpeg'];
+const heroImages = [
+  'hero.webp',
+  'hero-2.jpg',
+  'hero-3.jpg',
+  'hero-4.jpg',
+  'hero-5.jpeg',
+  'hero-6.jpeg',
+  'hero-7.png',
+  'hero-8.png',
+];
+
 const currentIndex = ref(0);
-const showImage = ref(true); 
+const showImage = ref(true);
 
-let intervalId = null;
+let intervalId;
 
-const getHeroImageUrl = (name) => {
-  return new URL(`../assets/pictures/${name}`, import.meta.url).href;
-};
+const getHeroImageUrl = (name) =>
+  new URL(`../assets/pictures/${name}`, import.meta.url).href;
 
 onMounted(() => {
   intervalId = setInterval(() => {
-    showImage.value = false; // Start fade out
-    
+    showImage.value = false;
+
     setTimeout(() => {
-      currentIndex.value = (currentIndex.value + 1) % heroImages.length;
-      showImage.value = true; // Start fade in met nieuwe foto
-    }, 600); // Wacht tot de fade-out klaar is (match met CSS tijd)
+      currentIndex.value =
+        (currentIndex.value + 1) % heroImages.length;
+      showImage.value = true;
+    }, 300);
   }, 3000);
-});;
+});
 
 onUnmounted(() => {
-  // Stop de timer als de component wordt verlaten om geheugenlekken te voorkomen
-  if (intervalId) clearInterval(intervalId);
+  clearInterval(intervalId);
 });
 </script>
 
 <template>
   <main class="main-home">
-    <section 
-  :style="{ backgroundImage: `url(${getHeroImageUrl(heroImages[currentIndex])})` }"
-        >
-          <h1 class="h1-font"><em>ART</em>QUAKE</h1>
-          <p>
-            Waar jongeren samen kunst creëren, elkaar inspireren, van elkaar leren
-            en zichzelf zo verder kunnen ontwikkelen.
-          </p>
-          <a href="/artiesten" class="btn">Bekijk de artiesten</a>
-        </section>
+    <section class="hero">
+  <img
+    :src="getHeroImageUrl(heroImages[currentIndex])"
+    :class="['hero-img', { show: showImage }]"
+    alt=""
+  />
+
+  <h1 class="h1-font"><em>ART</em>QUAKE</h1>
+  <p>
+    Waar jongeren samen kunst creëren, elkaar inspireren, van elkaar leren
+    en zichzelf zo verder kunnen ontwikkelen.
+  </p>
+    <router-link to="/artiesten">
+      <a class="btn" href="">Bekijk de artiesten</a>
+    </router-link>
+</section>
     <section>
       <h2 class="h2-font">Stichting Villa <em>Artquake</em></h2>
+      <span class="line"></span>
       <p>
         In 2020 werd stichting Villa Artquake opgericht, met als doel een eigen
         culturele broedplaats te creëren. De naam verwijst naar Villa Kakelbont
@@ -51,6 +67,7 @@ onUnmounted(() => {
     </section>
     <section>
       <h2 class="h2-font">Impressie</h2>
+      <span class="line"></span>
       <p>
         Artquake is een creatief en cultureel jongerenplatform, waar
         jongerenkunst en talentontwikkeling centraal staan.
@@ -64,10 +81,10 @@ onUnmounted(() => {
         </button>
 
         <div class="slider" ref="slider">
-          <img src="../assets/pictures/hero.png" alt="" />
-          <img src="../assets/pictures/hero.png" alt="" />
-          <img src="../assets/pictures/hero.png" alt="" />
-          <img src="../assets/pictures/hero.png" alt="" />
+          <img loading="lazy" src="../assets/pictures/hero.png" alt="" />
+          <img loading="lazy" src="../assets/pictures/hero.png" alt="" />
+          <img loading="lazy" src="../assets/pictures/hero.png" alt="" />
+          <img loading="lazy" src="../assets/pictures/hero.png" alt="" />
         </div>
 
         <button aria-label="Schuif de foto's naar rechts knop" class="nav next" @click="scrollRight">
@@ -78,17 +95,19 @@ onUnmounted(() => {
       </div>
     </section>
     <section>
-      <h2 class="h2-font">Bekijk de <em>video</em></h2>
+      <h2 class="h2-font">Bekijk de <em>video</em> van onze locatie</h2>
+      <span class="line"></span>
       <p>
         Heb je een job, project of optreden? Zet ’m op het Prikbord en kom in
         contact met makers.
       </p>
       <video
-        src="https://art-quake.com/wp-content/uploads/2024/02/artquake.mp4"
+        src="../assets/dewi.mp4"
         controls
-        poster="../assets/pictures/hero.png"
+        autoplay
         preload="metadata"
         muted
+        loop
       >
         <source
           src="https://art-quake.com/wp-content/uploads/2024/02/artquake.mp4"
@@ -98,12 +117,15 @@ onUnmounted(() => {
       </video>
     </section>
     <section>
-      <h2 class="h2-font">Heb jij <em>talent?</em></h2>
+      <h2 class="h2-font">Heb jij <em>talent?</em>of heb je een <em>andere vraag?</em></h2>
+      <span class="line"></span>
       <p>
         Laat zien wat je kunt, deel je passie en kom in contact met mensen die
         jouw talent waarderen en nodig hebben.
       </p>
-      <a href="" class="btn">Contact ons</a>
+      <router-link to="/contact">
+      <a class="btn" href="">Contact ons</a>
+    </router-link>
     </section>
   </main>
 </template>
@@ -111,9 +133,16 @@ onUnmounted(() => {
 <style scoped>
 section {
   position: relative;
-  height: 80vh;
+  min-height: 80vh;
   place-content: center;
   justify-content: left;
+
+  .line  {
+    background: var(--c-primary);
+    width: 4rem;
+    height: 3px;
+    border-radius: var(--br);
+  }
 
   @media (min-width: 900px){
     place-content: center;
@@ -125,9 +154,21 @@ section {
 
   &:nth-of-type(1) {
     height: 100dvh;
-    background-image: url(../assets/pictures/hero.png);
-    background-size: cover;
-    background-position: center;
+
+    .hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  z-index: 0;
+}
+
+.hero-img.show {
+  opacity: 1;
+}
 
     @media (min-width: 900px) {
       place-content: center;
@@ -234,12 +275,16 @@ section {
   }
 
   &:nth-of-type(4) {
+    padding: 8rem 1.5rem;
+
     h2:before {
       content: var(--t-3);
     }
 
     video {
-      max-width: 100%;
+      max-width: 20rem;
+      /* justify-self: center; */
+      margin-top: 2rem;
     }
   }
 

@@ -201,10 +201,10 @@ const handleSubmit = async () => {
           <label>Studio</label>
           <select v-model="form.studio" required>
             <option disabled value="">Studio's</option>
-            <option>Oefen ruimte</option>
-            <option>Opneem studio</option>
+            <option>Oefenruimte muziek</option>
+            <option>Opnamestudio</option>
+            <option>Dansstudio</option>
             <option>Atelier</option>
-            <option>Danszaal</option>
             <option>Kleine Theaterzaal</option>
           </select>
           <label>Datum</label>

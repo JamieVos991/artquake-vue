@@ -12,7 +12,9 @@ import "../assets/stylesheets/footer.css";
 
     <address>
       <a href="mailto:info@art-quake.com">info@art-quake.com</a>
-      <a href="">+31 6 40129447</a>
+      <a href="https://api.whatsapp.com/send?phone=31640129447"
+        >+31 6 40129447</a
+      >
       <p>Sara de Bronovoland 7, Heerhugowaard</p>
     </address>
     <div>
