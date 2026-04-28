@@ -2,38 +2,68 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 
 const heroImages = [
-  'hero.webp',
-  'hero-2.jpg',
-  'hero-3.jpg',
-  'hero-4.jpg',
-  'hero-5.jpeg',
-  'hero-6.jpeg',
-  'hero-7.png',
-  'hero-8.png',
+  'hero.webp', 'hero-2.jpg', 'hero-3.jpg', 'hero-4.jpg',
+  'hero-5.jpeg', 'hero-6.jpeg', 'hero-7.png', 'hero-8.png',
 ];
 
 const currentIndex = ref(0);
 const showImage = ref(true);
-
+const videoRef = ref(null);
+const isMuted = ref(true); // De video begint gedempt
+let observer;
 let intervalId;
+
+const toggleMute = () => {
+  if (videoRef.value) {
+    isMuted.value = !isMuted.value;
+    videoRef.value.muted = isMuted.value;
+    videoRef.value.volume = 0.5; // Zorg dat het volume op 50% staat
+  }
+};
 
 const getHeroImageUrl = (name) =>
   new URL(`../assets/pictures/${name}`, import.meta.url).href;
 
 onMounted(() => {
+  // 1. Hero Carousel
   intervalId = setInterval(() => {
     showImage.value = false;
-
     setTimeout(() => {
-      currentIndex.value =
-        (currentIndex.value + 1) % heroImages.length;
+      currentIndex.value = (currentIndex.value + 1) % heroImages.length;
       showImage.value = true;
     }, 300);
   }, 3000);
+
+  // 2. Video Instellingen & Observer
+  if (videoRef.value) {
+    // Zet volume op 50%
+    videoRef.value.volume = 0.5;
+    
+    // Belangrijk: we laten 'muted' even aanstaan voor de autoplay, 
+    // browsers accepteren zelden autoplay met geluid zonder interactie.
+    videoRef.value.muted = true; 
+
+    observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // Gebruik .catch() om fouten te voorkomen als de browser blokkeert
+          videoRef.value.play().catch(err => {
+            console.log("Autoplay met geluid werd geblokkeerd door de browser.");
+          });
+        } else {
+          videoRef.value.pause();
+        }
+      },
+      { threshold: 0.3 } 
+    );
+
+    observer.observe(videoRef.value);
+  }
 });
 
 onUnmounted(() => {
   clearInterval(intervalId);
+  if (observer) observer.disconnect();
 });
 </script>
 
@@ -81,10 +111,10 @@ onUnmounted(() => {
         </button>
 
         <div class="slider" ref="slider">
-          <img loading="lazy" src="../assets/pictures/hero.png" alt="" />
-          <img loading="lazy" src="../assets/pictures/hero.png" alt="" />
-          <img loading="lazy" src="../assets/pictures/hero.png" alt="" />
-          <img loading="lazy" src="../assets/pictures/hero.png" alt="" />
+          <img loading="lazy" src="../assets/pictures/hero.webp" alt="" />
+          <img loading="lazy" src="../assets/pictures/hero.webp" alt="" />
+          <img loading="lazy" src="../assets/pictures/hero.webp" alt="" />
+          <img loading="lazy" src="../assets/pictures/hero.webp" alt="" />
         </div>
 
         <button aria-label="Schuif de foto's naar rechts knop" class="nav next" @click="scrollRight">
@@ -101,20 +131,23 @@ onUnmounted(() => {
         Heb je een job, project of optreden? Zet ’m op het Prikbord en kom in
         contact met makers.
       </p>
-      <video
-        src="../assets/dewi.mp4"
-        controls
-        autoplay
-        preload="metadata"
-        muted
-        loop
-      >
-        <source
-          src="https://art-quake.com/wp-content/uploads/2024/02/artquake.mp4"
-          type="video/mp4"
-        />
-        Je browser ondersteunt deze video niet.
-      </video>
+      <div class="video-container">
+    <video
+      ref="videoRef"
+      src="../assets/dewi.mp4"
+      loop
+      playsinline
+      muted 
+      class="custom-video"
+    >
+      <source src="https://art-quake.com/wp-content/uploads/2024/02/artquake.mp4" type="video/mp4" />
+    </video>
+
+    <button @click="toggleMute" class="mute-btn" aria-label="Geluid aan/uit">
+      <span v-if="isMuted">🔇 Geluid aan</span>
+      <span v-else>🔊 50% Volume</span>
+    </button>
+  </div>
     </section>
     <section>
       <h2 class="h2-font">Heb jij <em>talent?</em>of heb je een <em>andere vraag?</em></h2>
