@@ -18,20 +18,6 @@ import "../assets/stylesheets/footer.css";
       <p>Sara de Bronovoland 7, Heerhugowaard</p>
     </address>
     <div>
-      <a href="https://www.facebook.com/artquake.westfriesland/">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M9.19795 21.5H13.198V13.4901H16.8021L17.198 9.50977H13.198V7.5C13.198 6.94772 13.6457 6.5 14.198 6.5H17.198V2.5H14.198C11.4365 2.5 9.19795 4.73858 9.19795 7.5V9.50977H7.19795L6.80206 13.4901H9.19795V21.5Z"
-            fill="currentColor"
-          />
-        </svg>
-      </a>
       <a href="https://www.instagram.com/artquake.westfriesland/">
         <svg
           width="24"
@@ -88,14 +74,28 @@ import "../assets/stylesheets/footer.css";
           />
         </svg>
       </a>
+      <a href="https://www.facebook.com/artquake.westfriesland/">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9.19795 21.5H13.198V13.4901H16.8021L17.198 9.50977H13.198V7.5C13.198 6.94772 13.6457 6.5 14.198 6.5H17.198V2.5H14.198C11.4365 2.5 9.19795 4.73858 9.19795 7.5V9.50977H7.19795L6.80206 13.4901H9.19795V21.5Z"
+            fill="currentColor"
+          />
+        </svg>
+      </a>
     </div>
     <iframe
-      title="Google maps adress"
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2420.602247018097!2d4.813835376644471!3d52.64909877209528!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47cf542b42485483%3A0x4f2dab81736bbb93!2sSara%20de%20Bron%C3%B3voland%2011%2C%201705%20MD%20Heerhugowaard!5e0!3m2!1snl!2snl!4v1772716813273!5m2!1snl!2snl"
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2420.60832757914!2d4.813373976599125!3d52.648988926671834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47cf542b40c0f6ff%3A0x2b70f5192242550c!2sSara%20de%20Bron%C3%B3voland%207%2C%201705%20MD%20Heerhugowaard!5e0!3m2!1snl!2snl!4v1777401650261!5m2!1snl!2snl"
       width="100%"
       style="border-radius: var(--br); border: none; aspect-ratio: 1/1"
       allowfullscreen=""
       loading="lazy"
+      title="Google maps adress"
       referrerpolicy="no-referrer-when-downgrade"
     ></iframe>
     <div>
