@@ -1,12 +1,11 @@
 <script setup>
 import { ref } from "vue";
-import { auth } from "../firebase"; // Pas het pad aan naar je firebase.js
+import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-// State
 const email = ref("");
 const password = ref("");
 const showPassword = ref(false);
@@ -17,14 +16,12 @@ const togglePassword = () => {
 };
 
 const login = async () => {
-  errorMessage.value = ""; // Reset foutmelding
+  errorMessage.value = "";
 
   try {
     await signInWithEmailAndPassword(auth, email.value, password.value);
-    // Succesvol ingelogd? Stuur door naar dashboard
     router.push("/dashboard");
   } catch (error) {
-    // Simpele foutafhandeling
     switch (error.code) {
       case "auth/user-not-found":
         errorMessage.value = "Gebruiker niet gevonden.";

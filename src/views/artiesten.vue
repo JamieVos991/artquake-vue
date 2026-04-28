@@ -4,7 +4,7 @@
   <main>
     <section>
       <label class="label" for="">Artiesten</label>
-      <h2 class="h2-font">De makers van nu.</h2>
+      <h2 class="h2-font">De makers van nu</h2>
       <p>
         Artquake bestaat uit talloze getalenteerde artiesten, die zowel op het
         podium staan als hun kunst tonen via exposities. Op deze pagina kun je

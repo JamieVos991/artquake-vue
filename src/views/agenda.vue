@@ -5,7 +5,7 @@ import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import Spinner from "../components/spinner.vue";
 
 const events = ref([]);
-const isLoading = ref(true); // Start op true
+const isLoading = ref(true);
 
 const fetchEvents = async () => {
   try {
@@ -18,7 +18,7 @@ const fetchEvents = async () => {
   } catch (error) {
     console.error("Fout bij ophalen events:", error);
   } finally {
-    isLoading.value = false; // Stop de spinner, ook als er een fout is
+    isLoading.value = false;
   }
 };
 
@@ -35,7 +35,7 @@ const formatDisplayDate = (dateStr) => {
   <main>
     <section>
       <label class="label">Agenda</label>
-      <h2 class="h2-font">Aankomende events van Artquake.</h2>
+      <h2 class="h2-font">Aankomende events van Artquake</h2>
       <p>
         Hieronder vind je een overzicht van alle aankomende evenementen en
         activiteiten die we organiseren. Volg ons op Instagram voor de verdere

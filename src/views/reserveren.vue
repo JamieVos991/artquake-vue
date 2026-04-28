@@ -175,7 +175,7 @@ const handleSubmit = async () => {
 
     <section>
       <label class="label" for="">Reserveren</label>
-      <h2 class="h2-font">Reserveer hier jouw studio.</h2>
+      <h2 class="h2-font">Reserveer hier jouw studio</h2>
       <p>
         Jouw creativiteit verdient een plek. Kies een studio, check de
         beschikbaarheid en leg je tijdslot direct vast.
