@@ -205,7 +205,7 @@ const handleSubmit = async () => {
             <option>Opnamestudio</option>
             <option>Dansstudio</option>
             <option>Atelier</option>
-            <option>Kleine Theaterzaal</option>
+            <!-- <option>Kleine Theaterzaal</option> -->
           </select>
           <label>Datum</label>
           <input
