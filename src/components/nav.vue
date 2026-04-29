@@ -96,9 +96,12 @@ const handleLogout = async () => {
       <ul :class="['ul-menu', { 'is-open': isOpen }]">
         <li><router-link to="/" @click="isOpen = false">Home</router-link></li>
         <li>
-          <router-link to="/organisatie" @click="isOpen = false"
-            >Organisatie</router-link
+          <router-link to="/activiteiten" @click="isOpen = false"
+            >Activiteiten</router-link
           >
+        </li>
+        <li>
+          <router-link to="/agenda" @click="isOpen = false">Agenda</router-link>
         </li>
         <li>
           <router-link to="/artiesten" @click="isOpen = false"
@@ -108,18 +111,16 @@ const handleLogout = async () => {
         <li>
           <router-link to="/crew" @click="isOpen = false">Crew</router-link>
         </li>
-        <li>
-          <router-link to="/agenda" @click="isOpen = false">Agenda</router-link>
-        </li>
-        <li>
-          <router-link to="/activiteiten" @click="isOpen = false"
-            >Activiteiten</router-link
-          >
-        </li>
+
         <li>
           <router-link to="/reserveren" @click="isOpen = false"
             >Reserveren</router-link
           >
+        </li>
+        <li>
+          <router-link to="/contact" @click="isOpen = false">
+            Contact
+          </router-link>
         </li>
         <li>
           <a
