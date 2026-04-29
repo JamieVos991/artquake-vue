@@ -41,7 +41,6 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory('/artquake-vue/'),
   routes,
-  // DIT IS DE FIX: Zorgt dat je altijd bovenaan de pagina begint
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition;
@@ -51,7 +50,6 @@ const router = createRouter({
   },
 })
 
-// Helper functie voor Firebase
 const getCurrentUser = () => {
   return new Promise((resolve, reject) => {
     const removeListener = onAuthStateChanged(
@@ -65,7 +63,6 @@ const getCurrentUser = () => {
   });
 };
 
-// Navigation Guard
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     const user = await getCurrentUser();

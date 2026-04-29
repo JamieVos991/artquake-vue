@@ -38,7 +38,7 @@ const fetchReservations = async () => {
       ...doc.data(),
     }));
   } catch (error) {
-    console.error("Fout bij ophalen reservaties:", error);
+    console.error("Fout bij ophalen van de reserveringen:", error);
   }
 };
 
@@ -92,13 +92,12 @@ const deleteAgendaItem = async (id) => {
   }
 };
 
-// Reservatie verwijderen
 const deleteReservation = async (id) => {
-  if (confirm("Weet je zeker dat je deze reservatie wilt verwijderen?")) {
+  if (confirm("Weet je zeker dat je deze reservering wilt verwijderen?")) {
     try {
       await deleteDoc(doc(db, "reservations", id));
       reservations.value = reservations.value.filter((res) => res.id !== id);
-      alert("Reservatie verwijderd.");
+      alert("reservering verwijderd.");
     } catch (error) {
       console.error("Fout bij verwijderen:", error);
     }
@@ -206,7 +205,7 @@ const formatDate = (timestamp) => {
       </div>
       <p v-else>Geen agenda items gevonden.</p>
 
-      <h3>Reservaties</h3>
+      <h3>Reserveringen</h3>
       <table v-if="reservations.length > 0">
         <thead>
           <tr>
@@ -231,7 +230,7 @@ const formatDate = (timestamp) => {
           </tr>
         </tbody>
       </table>
-      <p v-else>Geen reservaties gevonden.</p>
+      <p v-else>Geen reserveringen gevonden.</p>
     </section>
   </main>
 </template>
