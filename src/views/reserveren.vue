@@ -35,6 +35,7 @@ function generateTimes() {
   }
   return times;
 }
+
 const allTimes = generateTimes();
 
 const pad = (n) => String(n).padStart(2, "0");
@@ -73,7 +74,9 @@ function isPastTime(t) {
 }
 
 const startTimes = computed(() => {
-  return allTimes.map((t) => {
+  const timesForStart = allTimes.filter((t) => t !== "21:30");
+
+  return timesForStart.map((t) => {
     const isReserved = reservedPeriods.value.some(
       (p) => t >= p.start && t < p.end
     );
