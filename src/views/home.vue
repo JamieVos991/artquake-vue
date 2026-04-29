@@ -9,7 +9,7 @@ const heroImages = [
 const currentIndex = ref(0);
 const showImage = ref(true);
 const videoRef = ref(null);
-const isMuted = ref(true); // De video begint gedempt
+const isMuted = ref(true); 
 let observer;
 let intervalId;
 
@@ -17,7 +17,7 @@ const toggleMute = () => {
   if (videoRef.value) {
     isMuted.value = !isMuted.value;
     videoRef.value.muted = isMuted.value;
-    videoRef.value.volume = 0.5; // Zorg dat het volume op 50% staat
+    videoRef.value.volume = 0.5; 
   }
 };
 
@@ -25,7 +25,6 @@ const getHeroImageUrl = (name) =>
   new URL(`../assets/pictures/${name}`, import.meta.url).href;
 
 onMounted(() => {
-  // 1. Hero Carousel
   intervalId = setInterval(() => {
     showImage.value = false;
     setTimeout(() => {
@@ -34,19 +33,14 @@ onMounted(() => {
     }, 300);
   }, 3000);
 
-  // 2. Video Instellingen & Observer
   if (videoRef.value) {
-    // Zet volume op 50%
     videoRef.value.volume = 0.5;
     
-    // Belangrijk: we laten 'muted' even aanstaan voor de autoplay, 
-    // browsers accepteren zelden autoplay met geluid zonder interactie.
     videoRef.value.muted = true; 
 
     observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Gebruik .catch() om fouten te voorkomen als de browser blokkeert
           videoRef.value.play().catch(err => {
             console.log("Autoplay met geluid werd geblokkeerd door de browser.");
           });
@@ -96,6 +90,34 @@ onUnmounted(() => {
       </p>
     </section>
     <section>
+      <h2 class="h2-font">Bekijk de <em>video</em> van onze locatie</h2>
+      <span class="line"></span>
+      <p>
+        Heb je een job, project of optreden? Zet ’m op het Prikbord en kom in
+        contact met makers.
+      </p>
+      <div class="video-container">
+    <video
+      ref="videoRef"
+      src="../assets/dewi.mp4"
+      loop
+      controls
+      playsinline
+      muted 
+      class="custom-video"
+    >
+      <source src="https://art-quake.com/wp-content/uploads/2024/02/artquake.mp4" type="video/mp4" />
+    </video>
+
+    <button @click="toggleMute" class="mute-btn" aria-label="Geluid aan/uit">
+      <span v-if="isMuted">🔉</span>
+      <span v-else>
+        🔇
+      </span>
+    </button>
+  </div>
+    </section>
+    <section>
       <h2 class="h2-font">Impressie</h2>
       <span class="line"></span>
       <p>
@@ -124,31 +146,7 @@ onUnmounted(() => {
         </button>
       </div>
     </section>
-    <section>
-      <h2 class="h2-font">Bekijk de <em>video</em> van onze locatie</h2>
-      <span class="line"></span>
-      <p>
-        Heb je een job, project of optreden? Zet ’m op het Prikbord en kom in
-        contact met makers.
-      </p>
-      <div class="video-container">
-    <video
-      ref="videoRef"
-      src="../assets/dewi.mp4"
-      loop
-      playsinline
-      muted 
-      class="custom-video"
-    >
-      <source src="https://art-quake.com/wp-content/uploads/2024/02/artquake.mp4" type="video/mp4" />
-    </video>
-
-    <button @click="toggleMute" class="mute-btn" aria-label="Geluid aan/uit">
-      <span v-if="isMuted">🔇 Geluid aan</span>
-      <span v-else>🔊 50% Volume</span>
-    </button>
-  </div>
-    </section>
+    
     <section>
       <h2 class="h2-font">Heb jij <em>talent?</em>of heb je een <em>andere vraag?</em></h2>
       <span class="line"></span>
@@ -248,7 +246,7 @@ section {
     }
   }
 
-  &:nth-of-type(3) {
+  &:nth-of-type(4) {
     height: 100vh;
 
     h2:before {
@@ -307,8 +305,10 @@ section {
     }
   }
 
-  &:nth-of-type(4) {
+  &:nth-of-type(3) {
     padding: 8rem 1.5rem;
+    position: relative;
+
 
     h2:before {
       content: var(--t-3);
@@ -316,7 +316,7 @@ section {
 
     video {
       max-width: 20rem;
-      /* justify-self: center; */
+      /* justify-self: center; */ 
       margin-top: 2rem;
     }
   }
@@ -336,6 +336,20 @@ section {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.mute-btn {
+  position: absolute;
+  left: 3rem;
+  margin-top: 3.5rem;
+  background: var(--c-primary);
+  aspect-ratio: 1/1;
+  width: 3rem;
+  border-radius: var(--br);
+
+  span {
+    font-size: 1.5rem;
   }
 }
 </style>
