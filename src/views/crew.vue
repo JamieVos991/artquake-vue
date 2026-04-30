@@ -11,27 +11,27 @@
         ideeën werkelijkheid.
       </p>
       <article>
-        <img src="../assets/pictures/image.png" alt="Foto 1" />
+        <img src="../assets/pictures/Voorbeeld(2).png" alt="Foto 1" />
         <h3 class="h3-font">Mado de Vries</h3>
         <p>Oprichtster</p>
       </article>
       <article>
-        <img src="../assets/pictures/image.png" alt="Foto 2" />
+        <img src="../assets/pictures/Voorbeeld(2).png" alt="Foto 2" />
         <h3 class="h3-font">Mado de Vries</h3>
         <p>Oprichtster</p>
       </article>
       <article>
-        <img src="../assets/pictures/image.png" alt="Foto 3" />
+        <img src="../assets/pictures/Voorbeeld(2).png" alt="Foto 3" />
         <h3 class="h3-font">Mado de Vries</h3>
         <p>Oprichtster</p>
       </article>
       <article>
-        <img src="../assets/pictures/image.png" alt="Foto 4" />
+        <img src="../assets/pictures/Voorbeeld(2).png" alt="Foto 4" />
         <h3 class="h3-font">Mado de Vries</h3>
         <p>Oprichtster</p>
       </article>
       <article>
-        <img src="../assets/pictures/image.png" alt="Foto 5" />
+        <img src="../assets/pictures/Voorbeeld(2).png" alt="Foto 5" />
         <h3 class="h3-font">Mado de Vries</h3>
         <p>Oprichtster</p>
       </article>
