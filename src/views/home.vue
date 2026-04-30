@@ -150,7 +150,6 @@ onUnmounted(() => {
           src="../assets/videos/dewi-uitleg.mp4"
           loop
           preload="none"
-          controls
           playsinline
           muted
           class="custom-video"
