@@ -35,7 +35,7 @@ const formatDisplayDate = (dateStr) => {
   <main>
     <section>
       <label class="label">Agenda</label>
-      <h2 class="h2-font">Aankomende events van Artquake</h2>
+      <h2 class="h2-font">Aankomende <em>events</em> van Artquake</h2>
       <p>
         Hieronder vind je een overzicht van alle aankomende evenementen en
         activiteiten die we organiseren. Volg ons op Instagram voor de verdere

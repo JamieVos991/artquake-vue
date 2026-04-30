@@ -2,7 +2,7 @@
   <main>
     <section>
       <label class="label" for="">Activiteiten</label>
-      <h2 class="h2-font">Voorbeeld titel tekst tekst tekst tekst</h2>
+      <h2 class="h2-font"><em>Ontdek</em> wat er te beleven valt</h2>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora iste,
         eligendi, facilis vel consequuntur, numquam non similique culpa fugit

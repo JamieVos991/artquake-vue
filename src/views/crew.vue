@@ -4,7 +4,7 @@
   <main class="main-nav">
     <section>
       <label class="label" for="">Crew</label>
-      <h2 class="h2-font">De drijvende kracht achter de schermen</h2>
+      <h2 class="h2-font">De <em>drijvende kracht</em> achter de schermen</h2>
       <p>
         De crew is het hart van het team. Samen werken ze hard, helpen ze elkaar
         en zorgen ze dat alles soepel verloopt. Door teamwork en inzet maken ze
