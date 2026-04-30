@@ -1,11 +1,12 @@
 <script setup>
 import { ref, computed, watch } from "vue";
 import emailjs from "@emailjs/browser";
-import { initializeApp } from "firebase/app";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import Spinner from "../components/spinner.vue";
+import StatusMessage from "../components/StatusMessage.vue";
 
+// Formulier state
 const form = ref({
   name: "",
   email: "",
@@ -13,12 +14,27 @@ const form = ref({
   date: "",
   startTime: "",
   endTime: "",
-  company: "",
+  company: "", // Honeypot voor spam
 });
 
+// UI State
 const loading = ref(false);
 const reservedPeriods = ref([]);
+const status = ref({
+  show: false,
+  type: "success",
+  message: "",
+});
 
+// Helper: Toon status en verberg automatisch
+const showStatus = (type, msg) => {
+  status.value = { show: true, type, message: msg };
+  setTimeout(() => {
+    status.value.show = false;
+  }, 5000);
+};
+
+// Tijden genereren
 function generateTimes() {
   const times = [];
   let hour = 8,
@@ -37,13 +53,13 @@ function generateTimes() {
 }
 
 const allTimes = generateTimes();
-
 const pad = (n) => String(n).padStart(2, "0");
 const today = new Date();
 const minDate = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(
   today.getDate()
 )}`;
 
+// Firebase: Gereserveerde tijden ophalen
 async function fetchReservedPeriods() {
   if (!form.value.date || !form.value.studio) return [];
   const q = query(
@@ -60,12 +76,14 @@ async function fetchReservedPeriods() {
   return periods;
 }
 
+// Watchers
 watch([() => form.value.date, () => form.value.studio], async () => {
   reservedPeriods.value = await fetchReservedPeriods();
   form.value.startTime = "";
   form.value.endTime = "";
 });
 
+// Validatie voor tijd die al geweest is (vandaag)
 function isPastTime(t) {
   if (form.value.date !== minDate) return false;
   const [h, m] = t.split(":").map(Number);
@@ -73,25 +91,21 @@ function isPastTime(t) {
   return h * 60 + m <= now.getHours() * 60 + now.getMinutes();
 }
 
+// Computed: Beschikbare starttijden
 const startTimes = computed(() => {
   const timesForStart = allTimes.filter((t) => t !== "21:30");
-
   return timesForStart.map((t) => {
     const isReserved = reservedPeriods.value.some(
       (p) => t >= p.start && t < p.end
     );
-    return {
-      time: t,
-      disabled: isReserved || isPastTime(t),
-    };
+    return { time: t, disabled: isReserved || isPastTime(t) };
   });
 });
 
+// Computed: Beschikbare eindtijden
 const endTimes = computed(() => {
   if (!form.value.startTime) return [];
-
   const availableEndTimes = [];
-
   const nextReservation = reservedPeriods.value
     .filter((p) => p.start > form.value.startTime)
     .sort((a, b) => a.start.localeCompare(b.start))[0];
@@ -100,21 +114,14 @@ const endTimes = computed(() => {
 
   for (const t of allTimes) {
     if (t <= form.value.startTime) continue;
-
     if (t > limitTime) break;
-
     const isInsideReserved = reservedPeriods.value.some(
       (p) => t > p.start && t <= p.end
     );
-
     if (!isInsideReserved) {
-      availableEndTimes.push({
-        time: t,
-        disabled: false,
-      });
+      availableEndTimes.push({ time: t, disabled: false });
     }
   }
-
   return availableEndTimes;
 });
 
@@ -126,9 +133,11 @@ const duration = computed(() => {
   return `${diff} uur`;
 });
 
+// Submit
 const handleSubmit = async () => {
-  if (form.value.company) return;
+  if (form.value.company) return; // Honeypot check
   loading.value = true;
+
   try {
     await emailjs.send(
       "service_uqngj85",
@@ -150,7 +159,13 @@ const handleSubmit = async () => {
       createdAt: new Date(),
     });
 
-    alert("Reservering verstuurd, er wordt een bevestings mail gestuurd.");
+    // Succes state tonen
+    showStatus(
+      "success",
+      "Reservering gelukt! Check je e-mail voor de bevestiging."
+    );
+
+    // Reset formulier
     form.value = {
       name: "",
       email: "",
@@ -163,7 +178,10 @@ const handleSubmit = async () => {
     reservedPeriods.value = [];
   } catch (err) {
     console.error(err);
-    alert("Er ging iets mis 😬");
+    showStatus(
+      "error",
+      "Er ging iets mis bij het verzenden. Probeer het opnieuw."
+    );
   } finally {
     loading.value = false;
   }
@@ -172,6 +190,12 @@ const handleSubmit = async () => {
 
 <template>
   <main>
+    <StatusMessage
+      :show="status.show"
+      :type="status.type"
+      :message="status.message"
+    />
+
     <div v-if="loading" class="loading-overlay">
       <div class="loader-content"><Spinner label="Ogenblik geduld..."" /></div>
     </div>
@@ -258,9 +282,18 @@ const handleSubmit = async () => {
           </p>
         </fieldset>
 
-        <input v-model="form.company" type="text" style="display: none" />
+        <!-- Honeypot (onzichtbaar voor mensen) -->
+        <input
+          v-model="form.company"
+          type="text"
+          style="display: none"
+          tabindex="-1"
+          autocomplete="off"
+        />
 
-        <button class="btn" type="submit" :disabled="loading">Reserveer</button>
+        <button class="btn" type="submit" :disabled="loading">
+          {{ loading ? "Bezig..." : "Bevestig Reservering" }}
+        </button>
       </form>
     </section>
   </main>
