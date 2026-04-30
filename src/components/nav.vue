@@ -48,9 +48,7 @@ const handleLogout = async () => {
 
 <template>
   <header>
-    <a href="/">
-      <img src="../assets/pictures/logo.png" alt="Logo van Artquake" />
-    </a>
+    <img src="../assets/pictures/artquake-logo.avif" alt="Logo van Artquake" />
     <nav>
       <button @click="toggleMenu" :aria-expanded="isOpen">
         <svg

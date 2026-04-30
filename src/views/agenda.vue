@@ -53,12 +53,18 @@ const formatDisplayDate = (dateStr) => {
             '--band-image': `url(${event.imageUrl || 'default-image.png'})`,
           }"
         >
-          <!-- <img :src="event.imageUrl || 'default-image.png'" alt="Event image" /> -->
-          <p>{{ event.band }}</p>
-          <p>{{ event.place }}</p>
-          <p>{{ event.startTime }} - {{ event.endTime }}</p>
-          <!-- <p>{{ event.type }}</p> -->
-          <div></div>
+          <div>
+            <img
+              :src="event.imageUrl || 'default-image.png'"
+              alt="Event image"
+            />
+          </div>
+          <div>
+            <p>{{ event.band }}</p>
+            <p>{{ event.place }}</p>
+            <p>{{ event.startTime }} - {{ event.endTime }}</p>
+            <!-- <p>{{ event.type }}</p> -->
+          </div>
         </li>
       </ul>
 
@@ -74,24 +80,17 @@ section {
 
 /* Je bestaande styles */
 li {
-  background-image: var(--band-image);
   background-size: cover;
   border-radius: var(--br);
-  padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+  padding: 1.5rem;
   min-height: 10rem;
   margin-top: 4rem;
+  background-color: #363636;
   position: relative;
-  /* display: grid; */
-  list-style: none;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-transform: uppercase;
+  list-style: none;
+  align-items: center;
   z-index: 0;
-  /* grid-template-areas:
-    "band band band"
-    "place place place"
-    "time time type"; */
 
   &::before {
     content: var(--band-date);
@@ -113,24 +112,13 @@ li {
     rotate: -1.5deg;
   }
 
-  div {
-    background: hsl(0, 0%, 0%, 0.6);
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 0;
-    bottom: 0;
-    position: absolute;
-    border: 6px solid var(--c-secondary);
-    inset: 0;
-    border-radius: var(--br);
-  }
-
   img {
-    width: 6rem;
+    width: 7rem;
     border-radius: var(--br);
     grid-area: picture;
     object-fit: cover;
+    padding-right: 1rem;
+    z-index: 10;
   }
 
   p {
@@ -140,16 +128,17 @@ li {
 
   p:nth-of-type(1) {
     grid-area: band;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 700;
   }
   p:nth-of-type(2) {
     grid-area: place;
     font-weight: 100;
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   p:nth-of-type(3) {
     grid-area: time;
+    font-size: 1rem;
   }
   p:nth-of-type(4) {
     grid-area: type;

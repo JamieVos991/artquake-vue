@@ -1,84 +1,129 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from "vue";
+
+const SLIDE_DURATION = 3000; // Tijd tussen foto's (ms)
+const TRANSITION_DELAY = 300; // Match met CSS transition (ms)
 
 const heroImages = [
-  'hero.webp', 'hero-2.jpg', 'hero-3.jpg', 'hero-4.jpg',
-  'hero-5.jpeg', 'hero-6.jpeg', 'hero-7.png', 'hero-8.png',
+  "meiden-die-zingen.avif",
+  "interieur-tekening.avif",
+  "meid-die-zingt.avif",
+  "optreden.avif",
+  "meiden-die-dansen.avif",
+  "graffiti.avif",
+  "meid-die-schrijft.avif",
+  "meid-die-tekent.avif",
 ];
 
 const currentIndex = ref(0);
 const showImage = ref(true);
 const videoRef = ref(null);
-const isMuted = ref(true); 
-let observer;
-let intervalId;
+const isMuted = ref(true);
+const slider = ref(null);
 
+let observer = null;
+let intervalId = null;
+
+// Wisselt tussen geluid aan/uit voor de video
 const toggleMute = () => {
-  if (videoRef.value) {
-    isMuted.value = !isMuted.value;
-    videoRef.value.muted = isMuted.value;
-    videoRef.value.volume = 0.5; 
-  }
+  if (!videoRef.value) return;
+
+  isMuted.value = !isMuted.value;
+  videoRef.value.muted = isMuted.value;
+  // Zet volume op 0.5 als hij niet gedempt is
+  videoRef.value.volume = isMuted.value ? 0 : 0.5;
 };
 
-const getHeroImageUrl = (name) =>
-  new URL(`../assets/pictures/${name}`, import.meta.url).href;
+// Handmatige slider navigatie
+const scrollSlider = (direction) => {
+  if (!slider.value) return;
+  const scrollAmount = direction === "left" ? -300 : 300;
+  slider.value.scrollBy({ left: scrollAmount, behavior: "smooth" });
+};
 
-onMounted(() => {
+// Genereert de volledige URL voor hero-afbeeldingen
+const getHeroImageUrl = (name) =>
+  new URL(`../assets/pictures/hero/${name}`, import.meta.url).href;
+
+// Start de automatische slideshow
+const startSlideshow = () => {
   intervalId = setInterval(() => {
-    showImage.value = false;
+    showImage.value = false; // Start fade-out effect
+
+    // Wacht tot fade-out klaar is voordat we de bron wisselen
     setTimeout(() => {
       currentIndex.value = (currentIndex.value + 1) % heroImages.length;
-      showImage.value = true;
-    }, 300);
-  }, 3000);
+      showImage.value = true; // Start fade-in effect
+    }, TRANSITION_DELAY);
+  }, SLIDE_DURATION);
+};
 
-  if (videoRef.value) {
-    videoRef.value.volume = 0.5;
-    
-    videoRef.value.muted = true; 
+// Setup voor de Video Observer (Autoplay wanneer in beeld)
+const setupVideoObserver = () => {
+  if (!videoRef.value) return;
 
-    observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          videoRef.value.play().catch(err => {
-            console.log("Autoplay met geluid werd geblokkeerd door de browser.");
+  observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        // Gebruik een promise check om autoplay errors op te vangen
+        const playPromise = videoRef.value.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            console.warn(
+              "Autoplay geblokkeerd. Video blijft gepauzeerd tot interactie."
+            );
           });
-        } else {
-          videoRef.value.pause();
         }
-      },
-      { threshold: 0.3 } 
-    );
+      } else {
+        videoRef.value.pause();
+      }
+    },
+    { threshold: 0.3 }
+  );
 
-    observer.observe(videoRef.value);
-  }
+  observer.observe(videoRef.value);
+};
+
+onMounted(() => {
+  startSlideshow();
+  setupVideoObserver();
+
+  // Initiële volume instelling
+  if (videoRef.value) videoRef.value.volume = 0.5;
 });
 
 onUnmounted(() => {
-  clearInterval(intervalId);
+  // Voorkom geheugenlekken door timers en observers te stoppen
+  if (intervalId) clearInterval(intervalId);
   if (observer) observer.disconnect();
 });
 </script>
 
 <template>
   <main class="main-home">
+    <!-- Section 1: Hero -->
     <section class="hero">
-  <img
-    :src="getHeroImageUrl(heroImages[currentIndex])"
-    :class="['hero-img', { show: showImage }]"
-    alt=""
-  />
+      <img
+        :src="getHeroImageUrl(heroImages[currentIndex])"
+        :class="['hero-img', { show: showImage }]"
+        :fetchpriority="currentIndex === 0 ? 'high' : 'low'"
+        :loading="currentIndex === 0 ? 'eager' : 'lazy'"
+        alt="Hero Image Artquake"
+      />
 
-  <h1 class="h1-font"><em>ART</em>QUAKE</h1>
-  <p>
-    Waar jongeren samen kunst creëren, elkaar inspireren, van elkaar leren
-    en zichzelf zo verder kunnen ontwikkelen.
-  </p>
-    <router-link to="/artiesten">
-      <a class="btn" href="">Bekijk de artiesten</a>
-    </router-link>
-</section>
+      <h1 class="h1-font"><em>ART</em>QUAKE</h1>
+
+      <p>
+        Waar jongeren samen kunst creëren, elkaar inspireren, van elkaar leren
+        en zichzelf zo verder kunnen ontwikkelen.
+      </p>
+
+      <router-link to="/artiesten" class="btn">
+        Bekijk de artiesten
+      </router-link>
+    </section>
+
+    <!-- Section 2: Stichting Info -->
     <section>
       <h2 class="h2-font">Stichting Villa <em>Artquake</em></h2>
       <span class="line"></span>
@@ -89,6 +134,8 @@ onUnmounted(() => {
         oordeel en hokjes.
       </p>
     </section>
+
+    <!-- Section 3: Video -->
     <section>
       <h2 class="h2-font">Bekijk de <em>video</em> van onze locatie</h2>
       <span class="line"></span>
@@ -96,27 +143,36 @@ onUnmounted(() => {
         Heb je een job, project of optreden? Zet ’m op het Prikbord en kom in
         contact met makers.
       </p>
-      <div class="video-container">
-    <video
-      ref="videoRef"
-      src="../assets/dewi.mp4"
-      loop
-      controls
-      playsinline
-      muted 
-      class="custom-video"
-    >
-      <source src="https://art-quake.com/wp-content/uploads/2024/02/artquake.mp4" type="video/mp4" />
-    </video>
 
-    <button @click="toggleMute" class="mute-btn" aria-label="Geluid aan/uit">
-      <span v-if="isMuted">🔉</span>
-      <span v-else>
-        🔇
-      </span>
-    </button>
-  </div>
+      <div class="video-container">
+        <video
+          ref="videoRef"
+          src="../assets/videos/dewi.mp4"
+          loop
+          preload="none"
+          controls
+          playsinline
+          muted
+          class="custom-video"
+        >
+          <source
+            src="https://art-quake.com/wp-content/uploads/2024/02/artquake.mp4"
+            type="video/mp4"
+          />
+        </video>
+
+        <button
+          @click="toggleMute"
+          class="mute-btn"
+          aria-label="Geluid aan/uit"
+        >
+          <span v-if="isMuted">🔇</span>
+          <span v-else>🔉</span>
+        </button>
+      </div>
     </section>
+
+    <!-- Section 4: Impressie Slider -->
     <section>
       <h2 class="h2-font">Impressie</h2>
       <span class="line"></span>
@@ -126,37 +182,59 @@ onUnmounted(() => {
       </p>
 
       <div class="slider-wrapper">
-        <button aria-label="Schuif de foto's naar links knop" class="nav prev" @click="scrollLeft">
-            <img alt=""
-            src="../assets/pictures/chevron-left.svg"
-          ></img>
+        <button
+          @click="scrollSlider('left')"
+          class="nav prev"
+          aria-label="Vorige foto"
+        >
+          <img src="../assets/svg/chevron-left.svg" alt="" />
         </button>
 
         <div class="slider" ref="slider">
-          <img loading="lazy" src="../assets/pictures/hero.webp" alt="" />
-          <img loading="lazy" src="../assets/pictures/hero.webp" alt="" />
-          <img loading="lazy" src="../assets/pictures/hero.webp" alt="" />
-          <img loading="lazy" src="../assets/pictures/hero.webp" alt="" />
+          <img
+            loading="lazy"
+            src="../assets/pictures/hero/meiden-die-zingen.avif"
+            alt="Impressie 1"
+          />
+          <img
+            loading="lazy"
+            src="../assets/pictures/hero/meiden-die-zingen.avif"
+            alt="Impressie 2"
+          />
+          <img
+            loading="lazy"
+            src="../assets/pictures/hero/meiden-die-zingen.avif"
+            alt="Impressie 3"
+          />
+          <img
+            loading="lazy"
+            src="../assets/pictures/hero/meiden-die-zingen.avif"
+            alt="Impressie 4"
+          />
         </div>
 
-        <button aria-label="Schuif de foto's naar rechts knop" class="nav next" @click="scrollRight">
-          <img alt=""
-            src="../assets/pictures/chevron-right.svg"
-          ></img>
+        <button
+          @click="scrollSlider('right')"
+          class="nav next"
+          aria-label="Volgende foto"
+        >
+          <img src="../assets/svg/chevron-right.svg" alt="" />
         </button>
       </div>
     </section>
-    
+
+    <!-- Section 5: Talent Contact -->
     <section>
-      <h2 class="h2-font">Heb jij <em>talent?</em>of heb je een <em>andere vraag?</em></h2>
+      <h2 class="h2-font">
+        Heb jij <em>talent?</em> of heb je een <em>andere vraag?</em>
+      </h2>
       <span class="line"></span>
       <p>
         Laat zien wat je kunt, deel je passie en kom in contact met mensen die
         jouw talent waarderen en nodig hebben.
       </p>
-      <router-link to="/contact">
-      <a class="btn" href="">Contact ons</a>
-    </router-link>
+
+      <router-link to="/contact" class="btn"> Contact ons </router-link>
     </section>
   </main>
 </template>
@@ -168,14 +246,14 @@ section {
   place-content: center;
   justify-content: left;
 
-  .line  {
+  .line {
     background: var(--c-primary);
     width: 4rem;
     height: 3px;
     border-radius: var(--br);
   }
 
-  @media (min-width: 900px){
+  @media (min-width: 900px) {
     place-content: center;
   }
 
@@ -185,21 +263,23 @@ section {
 
   &:nth-of-type(1) {
     height: 100dvh;
+    background: url("/pictures/hero/meiden-die-zingen.avif") center/cover
+      no-repeat;
 
     .hero-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  z-index: 0;
-}
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      z-index: 0;
+    }
 
-.hero-img.show {
-  opacity: 1;
-}
+    .hero-img.show {
+      opacity: 1;
+    }
 
     @media (min-width: 900px) {
       place-content: center;
@@ -210,7 +290,7 @@ section {
     p,
     a {
       z-index: 2;
-      opacity: 0; 
+      opacity: 0;
       animation: fadeInUp 0.8s ease-out forwards;
 
       @media (min-width: 900px) {
@@ -243,6 +323,7 @@ section {
   &:nth-of-type(2) {
     h2:before {
       content: var(--t-1);
+      color: var(--c-pseudo-dark);
     }
   }
 
@@ -251,6 +332,7 @@ section {
 
     h2:before {
       content: var(--t-2);
+      color: var(--c-pseudo-dark);
     }
 
     .slider-wrapper {
@@ -290,9 +372,9 @@ section {
       transform: translateY(-50%);
       border: none;
       font-size: 2rem;
-      padding: 0.5rem .8rem;
+      padding: 0.5rem 0.8rem;
       cursor: pointer;
-      opacity: .9;
+      opacity: 0.9;
       z-index: 5;
     }
 
@@ -309,14 +391,14 @@ section {
     padding: 8rem 1.5rem;
     position: relative;
 
-
     h2:before {
       content: var(--t-3);
+      color: var(--c-pseudo-light);
     }
 
     video {
       max-width: 20rem;
-      /* justify-self: center; */ 
+      /* justify-self: center; */
       margin-top: 2rem;
     }
   }
@@ -324,6 +406,7 @@ section {
   &:nth-of-type(5) {
     h2:before {
       content: var(--t-4);
+      color: var(--c-pseudo-light);
     }
   }
 }

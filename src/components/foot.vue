@@ -4,7 +4,7 @@ import "../assets/stylesheets/footer.css";
 
 <template>
   <footer>
-    <img src="../assets/pictures/logo.png" alt="Logo van Artquake" />
+    <img src="../assets/pictures/artquake-logo.avif" alt="Logo van Artquake" />
     <p>
       Waar jongeren samen kunst creëren, elkaar inspireren, van elkaar leren en
       zichzelf zo verder kunnen ontwikkelen.
@@ -18,7 +18,10 @@ import "../assets/stylesheets/footer.css";
       <p>Sara de Bronovoland 7, Heerhugowaard</p>
     </address>
     <div>
-      <a href="https://www.instagram.com/artquake.westfriesland/">
+      <a
+        aria-label="Artquaks Instagram"
+        href="https://www.instagram.com/artquake.westfriesland/"
+      >
         <svg
           width="24"
           height="24"
@@ -44,7 +47,10 @@ import "../assets/stylesheets/footer.css";
           />
         </svg>
       </a>
-      <a href="https://www.youtube.com/channel/UCOcpcYV4ybeHuJND7ZhQURQ">
+      <a
+        aria-label="Artquaks Youtube"
+        href="https://www.youtube.com/channel/UCOcpcYV4ybeHuJND7ZhQURQ"
+      >
         <svg
           width="24"
           height="24"
@@ -60,7 +66,10 @@ import "../assets/stylesheets/footer.css";
           />
         </svg>
       </a>
-      <a href="https://www.tiktok.com/@artquake_westfriesland">
+      <a
+        aria-label="Artquaks Tiktok"
+        href="https://www.tiktok.com/@artquake_westfriesland"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -74,7 +83,10 @@ import "../assets/stylesheets/footer.css";
           />
         </svg>
       </a>
-      <a href="https://www.facebook.com/artquake.westfriesland/">
+      <a
+        aria-label="Artquaks Facebook"
+        href="https://www.facebook.com/artquake.westfriesland/"
+      >
         <svg
           width="24"
           height="24"
@@ -89,7 +101,11 @@ import "../assets/stylesheets/footer.css";
         </svg>
       </a>
     </div>
-    <img src="../assets/pictures/footer.JPG" alt="" style="width: 100%" />
+    <img
+      src="../assets/pictures/artquake-gebouw.avif"
+      alt=""
+      style="width: 100%"
+    />
 
     <!-- <iframe
       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2420.60832757914!2d4.813373976599125!3d52.648988926671834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47cf542b40c0f6ff%3A0x2b70f5192242550c!2sSara%20de%20Bron%C3%B3voland%207%2C%201705%20MD%20Heerhugowaard!5e0!3m2!1snl!2snl!4v1777401650261!5m2!1snl!2snl"

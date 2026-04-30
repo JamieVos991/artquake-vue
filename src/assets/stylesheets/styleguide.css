@@ -8,12 +8,19 @@
 
 @font-face {
   font-family: "Tanker";
-  src: url("/artquake-vue/fonts/Tanker/OTF/Tanker-Regular.otf")
-    format("opentype");
+  src: url("../fonts/Tanker/OTF/Tanker-Regular.otf") format("opentype");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
 }
+
+@font-face {
+  font-family: "Jost";
+  src: url("../fonts/Jost/Jost-VariableFont_wght.ttf") format("opentype");
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --c-primary: hsl(272, 84%, 45%);
   --c-secondary: hsl(38, 83%, 47%);
@@ -22,7 +29,8 @@
   --c-bg: hsl(0, 0%, 5%);
   --c-bg-alt: hsl(0, 0%, 13%);
   --c-grey: rgb(152, 152, 152);
-  --c-pseudo: hsl(0, 0%, 9%);
+  --c-pseudo-dark: hsl(0, 0%, 8%);
+  --c-pseudo-light: hsl(0, 0%, 14%);
   --c-input: hsl(0, 0%, 14%);
   --c-required: hsl(0, 93%, 39%);
   --c-anchor: hsl(240, 69%, 77%);
@@ -31,7 +39,7 @@
   --f-size-h2: clamp(2rem, 12.5vw, 4rem);
   --f-size-h3: 1.5rem;
   --f-size-p: 1.1rem;
-  --f-size-bg: clamp(2rem, 90vw, 8rem);
+  --f-size-bg: clamp(2rem, 90vw, 7rem);
 
   --f-family-gillsans: "Gill Sans", sans-serif;
   --f-family-jost: "Jost", sans-serif;
@@ -42,7 +50,7 @@
   --br: 0.3rem;
 
   --t-1: "INSPIRE";
-  --t-2: "RISE";
+  --t-2: "GROW";
   --t-3: "YOUTH";
   --t-4: "BUILD";
 }

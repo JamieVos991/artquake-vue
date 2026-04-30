@@ -5,10 +5,21 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['vue', 'vue-router']
+        }
+      }
+    }
+  },
+
   plugins: [
     vue(),
     // vueDevTools(),
   ],
+  
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

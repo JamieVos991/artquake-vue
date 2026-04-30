@@ -3,7 +3,7 @@ import { auth } from './firebase'
 import { onAuthStateChanged } from "firebase/auth"
 
 // Importeer je views
-import Home from './views/home.vue'
+import Home from './views/Home.vue'
 import Organisatie from './views/organisatie.vue'
 import Crew from './views/crew.vue'
 import Reserveren from './views/reserveren.vue'
@@ -63,17 +63,16 @@ const getCurrentUser = () => {
   });
 };
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     const user = await getCurrentUser();
-    if (user) {
-      next(); 
-    } else {
-      next('/login'); 
+    
+    if (!user) {
+      return '/login';
     }
-  } else {
-    next(); 
   }
+  
+  return true;
 });
 
 export default router

@@ -24,42 +24,42 @@
 
     <section>
       <article>
-        <img src="../assets/pictures/band.png" />
+        <img src="../assets/pictures/Voorbeeld.png" />
         <p>Band Artquake</p>
       </article>
 
       <article>
-        <img src="../assets/pictures/band.png" />
+        <img src="../assets/pictures/Voorbeeld.png" />
         <p>Band Artquake</p>
       </article>
 
       <article>
-        <img src="../assets/pictures/band.png" />
+        <img src="../assets/pictures/Voorbeeld.png" />
         <p>Band Artquake</p>
       </article>
 
       <article>
-        <img src="../assets/pictures/band.png" />
+        <img src="../assets/pictures/Voorbeeld.png" />
         <p>Band Artquake</p>
       </article>
 
       <article>
-        <img src="../assets/pictures/band.png" />
+        <img src="../assets/pictures/Voorbeeld.png" />
         <p>Band Artquake</p>
       </article>
 
       <article>
-        <img src="../assets/pictures/band.png" />
+        <img src="../assets/pictures/Voorbeeld.png" />
         <p>Band Artquake</p>
       </article>
 
       <article>
-        <img src="../assets/pictures/band.png" />
+        <img src="../assets/pictures/Voorbeeld.png" />
         <p>Band Artquake</p>
       </article>
 
       <article>
-        <img src="../assets/pictures/band.png" />
+        <img src="../assets/pictures/Voorbeeld.png" />
         <p>Band Artquake</p>
       </article>
     </section>

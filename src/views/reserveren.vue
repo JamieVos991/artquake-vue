@@ -4,7 +4,7 @@ import emailjs from "@emailjs/browser";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import Spinner from "../components/spinner.vue";
-import StatusMessage from "../components/StatusMessage.vue";
+import StatusMessage from "../components/statusmessage.vue";
 
 // Formulier state
 const form = ref({
