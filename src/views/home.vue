@@ -147,7 +147,7 @@ onUnmounted(() => {
       <div class="video-container">
         <video
           ref="videoRef"
-          src="../assets/videos/dewi.mp4"
+          src="../assets/videos/dewi-uitleg.mp4"
           loop
           preload="none"
           controls

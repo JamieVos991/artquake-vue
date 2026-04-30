@@ -15,11 +15,9 @@
         festival, feest of andere bijzondere gelegenheid, neem contact met ons
         op!
       </p>
-      <select name="" id="">
-        <option value="">Alle</option>
-        <option value="">Podium</option>
-        <option value="">Expo</option>
-      </select>
+      <button>Alle</button>
+      <button>Podium</button>
+      <button>Expo</button>
     </section>
 
     <section>
@@ -67,6 +65,13 @@
 </template>
 
 <style scoped>
+section {
+  &:nth-of-type(1) {
+    button {
+      background: var(--c-primary);
+    }
+  }
+}
 section:nth-of-type(2) {
   width: 100%;
   display: flex;

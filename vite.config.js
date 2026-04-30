@@ -19,6 +19,8 @@ export default defineConfig({
     vue(),
     // vueDevTools(),
   ],
+
+  base: '/artquake-vue/',
   
   resolve: {
     alias: {
