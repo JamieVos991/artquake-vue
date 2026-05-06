@@ -1,3 +1,8 @@
+<script setup>
+import Slider from "../components/slider.vue";
+const sliderImages = ["1.avif", "2.avif", "3.avif", "4.avif", "5.avif"];
+</script>
+
 <template>
   <main>
     <section>
@@ -11,11 +16,10 @@
       </p>
       <h3 class="h3-font">Talent Night</h3>
       <p>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi vero
-        necessitatibus voluptates delectus asperiores dolore accusantium rerum
-        adipisci in enim veritatis consequuntur dignissimos officiis id neque,
-        quibusdam cupiditate quis! Eum.
+        Talent Night is dé uitgaansavond voor en door jongeren! Bomvol met jong,
+        aanstormend talent. Voor liefhebbers van live-muziek, dansen en feesten!
       </p>
+      <Slider :images="sliderImages" folder="talentnight" />
       <h3 class="h3-font">Jamsessies</h3>
       <p>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quasi vero

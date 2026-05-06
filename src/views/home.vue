@@ -1,8 +1,9 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
+import Slider from "../components/slider.vue";
 
-const SLIDE_DURATION = 3000; // Tijd tussen foto's (ms)
-const TRANSITION_DELAY = 300; // Match met CSS transition (ms)
+const SLIDE_DURATION = 3000;
+const TRANSITION_DELAY = 300;
 
 const heroImages = [
   "meiden-die-zingen.avif",
@@ -13,6 +14,14 @@ const heroImages = [
   "graffiti.avif",
   "meid-die-schrijft.avif",
   "meid-die-tekent.avif",
+];
+
+const workshopFotos = [
+  "meiden-die-zingen.avif",
+  "interieur-tekening.avif",
+  "meid-die-zingt.avif",
+  "optreden.avif",
+  "meiden-die-dansen.avif",
 ];
 
 const currentIndex = ref(0);
@@ -179,47 +188,7 @@ onUnmounted(() => {
         Artquake is een creatief en cultureel jongerenplatform, waar
         jongerenkunst en talentontwikkeling centraal staan.
       </p>
-
-      <div class="slider-wrapper">
-        <button
-          @click="scrollSlider('left')"
-          class="nav prev"
-          aria-label="Vorige foto"
-        >
-          <img src="../assets/svg/chevron-left.svg" alt="" />
-        </button>
-
-        <div class="slider" ref="slider">
-          <img
-            loading="lazy"
-            src="../assets/pictures/hero/meiden-die-zingen.avif"
-            alt="Impressie 1"
-          />
-          <img
-            loading="lazy"
-            src="../assets/pictures/hero/meiden-die-zingen.avif"
-            alt="Impressie 2"
-          />
-          <img
-            loading="lazy"
-            src="../assets/pictures/hero/meiden-die-zingen.avif"
-            alt="Impressie 3"
-          />
-          <img
-            loading="lazy"
-            src="../assets/pictures/hero/meiden-die-zingen.avif"
-            alt="Impressie 4"
-          />
-        </div>
-
-        <button
-          @click="scrollSlider('right')"
-          class="nav next"
-          aria-label="Volgende foto"
-        >
-          <img src="../assets/svg/chevron-right.svg" alt="" />
-        </button>
-      </div>
+      <Slider :images="workshopFotos" folder="hero" />
     </section>
 
     <!-- Section 5: Talent Contact -->

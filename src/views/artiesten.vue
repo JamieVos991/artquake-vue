@@ -15,9 +15,20 @@
         festival, feest of andere bijzondere gelegenheid, neem contact met ons
         op!
       </p>
-      <button>Alle</button>
-      <button>Podium</button>
-      <button>Expo</button>
+      <ul>
+        <li>
+          <button class="btn">Alle</button>
+        </li>
+        <li>
+          <button class="btn">Podium</button>
+        </li>
+        <li>
+          <button class="btn">Expo</button>
+        </li>
+      </ul>
+      <label class="input-wrapper">
+        <input type="search" />
+      </label>
     </section>
 
     <section>
@@ -67,8 +78,24 @@
 <style scoped>
 section {
   &:nth-of-type(1) {
-    button {
-      background: var(--c-primary);
+    ul {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+    }
+
+    label {
+      position: relative;
+
+      &::after {
+        content: url(../assets/svg/search.svg);
+        height: 100%;
+        position: absolute;
+        top: 0.3rem;
+        right: 0.5rem;
+        display: flex;
+        align-items: center;
+      }
     }
   }
 }
