@@ -27,13 +27,11 @@ defineProps({
 .spinner {
   width: 50px;
   height: 50px;
-  /* Gebruik je thema kleuren */
-  border: 4px solid var(--paarse-kleur, #6200ee);
-  border-top: 4px solid var(--oranje-kleur, #ff9800);
+  border: 4px solid var(--c-primary);
+  border-top: 4px solid var(--c-secondary);
   border-right: 4px solid transparent;
   border-radius: 50%;
 
-  /* De "wervel" animatie */
   animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
@@ -51,8 +49,8 @@ defineProps({
 }
 
 p {
-  color: white;
-  font-family: var(--font-family-jost);
+  color: var(--c-light);
+  font-family: var(--f-family-jost);
   letter-spacing: 1px;
   font-size: 0.9rem;
   opacity: 0.8;

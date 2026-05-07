@@ -1,8 +1,6 @@
 footer {
   background: var(--c-bg-alt);
-  min-height: 50vh;
   display: grid;
-  place-content: baseline;
   padding: 2.5rem 1.5rem;
   gap: 2rem;
 
@@ -23,5 +21,27 @@ footer {
     display: flex;
     align-items: center;
     gap: 1rem;
+  }
+}
+
+@media (min-width: 900px) {
+  footer {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    padding: 4rem max(var(--gap), calc((100vw - var(--content-max)) / 2));
+    gap: 3rem;
+
+    img:last-of-type {
+      grid-column: 2;
+      grid-row: 1 / span 4;
+      width: 100%;
+      object-fit: cover;
+      border-radius: var(--br-lg);
+      max-height: 28rem;
+    }
+
+    div:last-of-type {
+      grid-column: 1;
+    }
   }
 }

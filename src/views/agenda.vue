@@ -12,7 +12,6 @@ const fetchEvents = async () => {
     const q = query(collection(db, "agenda"), orderBy("date", "asc"));
     const querySnapshot = await getDocs(q);
 
-    // Get today's date at 00:00:00 for a fair comparison
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -21,7 +20,6 @@ const fetchEvents = async () => {
       ...doc.data(),
     }));
 
-    // Filter: only keep events where the date is today or in the future
     events.value = allEvents.filter((event) => {
       if (!event.date) return false;
       const eventDate = new Date(event.date);
@@ -46,7 +44,7 @@ const formatDisplayDate = (dateStr) => {
 <template>
   <main>
     <section>
-      <label class="label">Agenda</label>
+      <span class="label">Agenda</span>
       <h2 class="h2-font">Aankomende <em>events</em> van Artquake</h2>
       <p>
         Hieronder vind je een overzicht van alle aankomende evenementen en
@@ -75,7 +73,6 @@ const formatDisplayDate = (dateStr) => {
             <p>{{ event.band }}</p>
             <p>{{ event.place }}</p>
             <p>{{ event.startTime }} - {{ event.endTime }}</p>
-            <!-- <p>{{ event.type }}</p> -->
           </div>
         </li>
       </ul>
@@ -90,14 +87,19 @@ section {
   padding-bottom: 3rem;
 }
 
-/* Je bestaande styles */
+ul {
+  width: 100%;
+  max-width: 55rem;
+  padding: 0;
+}
+
 li {
   background-size: cover;
   border-radius: var(--br);
   padding: 1.5rem;
   min-height: 10rem;
   margin-top: 4rem;
-  background-color: #363636;
+  background-color: var(--c-bg-alt);
   border-left: 3px solid var(--c-secondary);
   position: relative;
   display: flex;
@@ -132,6 +134,10 @@ li {
     object-fit: cover;
     padding-right: 1rem;
     z-index: 10;
+
+    @media (min-width: 900px) {
+      width: 10rem;
+    }
   }
 
   p {

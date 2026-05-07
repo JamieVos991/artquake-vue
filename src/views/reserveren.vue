@@ -3,10 +3,12 @@ import { ref, computed, watch } from "vue";
 import emailjs from "@emailjs/browser";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
-import Spinner from "../components/spinner.vue";
 import StatusMessage from "../components/statusmessage.vue";
+import LoadingOverlay from "../components/loadingoverlay.vue";
+import { useStatus } from "../composables/useStatus.js";
 
-// Formulier state
+const { status, showStatus } = useStatus();
+
 const form = ref({
   name: "",
   email: "",
@@ -14,27 +16,12 @@ const form = ref({
   date: "",
   startTime: "",
   endTime: "",
-  company: "", // Honeypot voor spam
+  company: "",
 });
 
-// UI State
 const loading = ref(false);
 const reservedPeriods = ref([]);
-const status = ref({
-  show: false,
-  type: "success",
-  message: "",
-});
 
-// Helper: Toon status en verberg automatisch
-const showStatus = (type, msg) => {
-  status.value = { show: true, type, message: msg };
-  setTimeout(() => {
-    status.value.show = false;
-  }, 5000);
-};
-
-// Tijden genereren
 function generateTimes() {
   const times = [];
   let hour = 8,
@@ -59,7 +46,6 @@ const minDate = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(
   today.getDate()
 )}`;
 
-// Firebase: Gereserveerde tijden ophalen
 async function fetchReservedPeriods() {
   if (!form.value.date || !form.value.studio) return [];
   const q = query(
@@ -76,14 +62,12 @@ async function fetchReservedPeriods() {
   return periods;
 }
 
-// Watchers
 watch([() => form.value.date, () => form.value.studio], async () => {
   reservedPeriods.value = await fetchReservedPeriods();
   form.value.startTime = "";
   form.value.endTime = "";
 });
 
-// Validatie voor tijd die al geweest is (vandaag)
 function isPastTime(t) {
   if (form.value.date !== minDate) return false;
   const [h, m] = t.split(":").map(Number);
@@ -91,7 +75,6 @@ function isPastTime(t) {
   return h * 60 + m <= now.getHours() * 60 + now.getMinutes();
 }
 
-// Computed: Beschikbare starttijden
 const startTimes = computed(() => {
   const timesForStart = allTimes.filter((t) => t !== "21:30");
   return timesForStart.map((t) => {
@@ -102,7 +85,6 @@ const startTimes = computed(() => {
   });
 });
 
-// Computed: Beschikbare eindtijden
 const endTimes = computed(() => {
   if (!form.value.startTime) return [];
   const availableEndTimes = [];
@@ -133,9 +115,8 @@ const duration = computed(() => {
   return `${diff} uur`;
 });
 
-// Submit
 const handleSubmit = async () => {
-  if (form.value.company) return; // Honeypot check
+  if (form.value.company) return;
   loading.value = true;
 
   try {
@@ -159,13 +140,11 @@ const handleSubmit = async () => {
       createdAt: new Date(),
     });
 
-    // Succes state tonen
     showStatus(
       "success",
       "Reservering gelukt! Check je e-mail voor de bevestiging."
     );
 
-    // Reset formulier
     form.value = {
       name: "",
       email: "",
@@ -196,12 +175,10 @@ const handleSubmit = async () => {
       :message="status.message"
     />
 
-    <div v-if="loading" class="loading-overlay">
-      <div class="loader-content"><Spinner label="Ogenblik geduld..."" /></div>
-    </div>
+    <LoadingOverlay :show="loading" label="Ogenblik geduld..." />
 
     <section>
-      <label class="label" for="">Reserveren</label>
+      <span class="label">Reserveren</span>
       <h2 class="h2-font"><em>Reserveer</em> hier jouw studio</h2>
       <p>
         Jouw creativiteit verdient een plek. Kies een studio, check de
@@ -232,7 +209,6 @@ const handleSubmit = async () => {
             <option>Opnamestudio</option>
             <option>Dansstudio</option>
             <option>Atelier</option>
-            <!-- <option>Kleine Theaterzaal</option> -->
           </select>
           <label>Datum</label>
           <input
@@ -282,7 +258,6 @@ const handleSubmit = async () => {
           </p>
         </fieldset>
 
-        <!-- Honeypot (onzichtbaar voor mensen) -->
         <input
           v-model="form.company"
           type="text"
@@ -301,7 +276,7 @@ const handleSubmit = async () => {
 
 <style scoped>
 .reserveren-section {
-  background: #222831;
+  background: var(--c-bg-alt);
   height: 8rem;
   display: flex;
   gap: 1rem;
@@ -310,6 +285,23 @@ const handleSubmit = async () => {
 
   small {
     margin-bottom: 0.7rem;
+  }
+}
+
+@media (min-width: 900px) {
+  section {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+
+    .label,
+    h2 {
+      grid-column: 1 / -1;
+    }
+
+    form {
+      grid-column: 1 / -1;
+      max-width: 50rem;
+    }
   }
 }
 </style>

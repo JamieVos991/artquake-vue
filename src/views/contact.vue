@@ -2,8 +2,11 @@
 import { ref } from "vue";
 import { db } from "../firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import Spinner from "../components/spinner.vue";
 import StatusMessage from "../components/statusmessage.vue";
+import LoadingOverlay from "../components/loadingoverlay.vue";
+import { useStatus } from "../composables/useStatus.js";
+
+const { status, showStatus } = useStatus();
 
 const formData = ref({
   naam: "",
@@ -13,21 +16,6 @@ const formData = ref({
 });
 
 const isSending = ref(false);
-
-// Status state for the custom message component
-const status = ref({
-  show: false,
-  type: "success",
-  message: "",
-});
-
-// Helper: Show status and hide automatically after 5 seconds
-const showStatus = (type, msg) => {
-  status.value = { show: true, type, message: msg };
-  setTimeout(() => {
-    status.value.show = false;
-  }, 5000);
-};
 
 const handleSubmit = async () => {
   if (isSending.value) return;
@@ -42,14 +30,11 @@ const handleSubmit = async () => {
       datum: serverTimestamp(),
     });
 
-    // Custom success message
     showStatus("success", "Bedankt! Je bericht is succesvol verzonden.");
 
-    // Reset form
     formData.value = { naam: "", email: "", telefoon: "", bericht: "" };
   } catch (error) {
     console.error("Fout bij opslaan:", error);
-    // Custom error message
     showStatus("error", "Er ging iets mis. Probeer het later opnieuw.");
   } finally {
     isSending.value = false;
@@ -59,20 +44,16 @@ const handleSubmit = async () => {
 
 <template>
   <main>
-    <!-- Custom status component -->
     <StatusMessage
       :show="status.show"
       :type="status.type"
       :message="status.message"
     />
 
-    <!-- Loading overlay for consistency -->
-    <div v-if="isSending" class="loading-overlay">
-      <div class="loader-content"><Spinner label="Bericht verzenden..." /></div>
-    </div>
+    <LoadingOverlay :show="isSending" label="Bericht verzenden..." />
 
     <section>
-      <label class="label">Formulier</label>
+      <span class="label">Formulier</span>
       <h2 class="h2-font">Stel <em>je vraag</em> aan ons team</h2>
       <p>
         De crew is het hart van het team. Samen werken ze hard, helpen ze elkaar
@@ -128,17 +109,22 @@ const handleSubmit = async () => {
 </template>
 
 <style scoped>
-/* Ensure the loading overlay styles match your other component */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
+@media (min-width: 900px) {
+  section {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+
+    .label,
+    h2 {
+      grid-column: 1 / -1;
+    }
+
+    form {
+      grid-column: 2;
+      grid-row: 3 / span 2;
+      align-self: start;
+    }
+  }
 }
 </style>
+

@@ -5,8 +5,9 @@ import Slider from "../components/slider.vue";
 const SLIDE_DURATION = 3000;
 const TRANSITION_DELAY = 300;
 
+const FIRST_HERO_IMAGE = "/pictures/hero/meiden-die-zingen.avif";
+
 const heroImages = [
-  "meiden-die-zingen.avif",
   "interieur-tekening.avif",
   "meid-die-zingt.avif",
   "optreden.avif",
@@ -28,53 +29,43 @@ const currentIndex = ref(0);
 const showImage = ref(true);
 const videoRef = ref(null);
 const isMuted = ref(true);
-const slider = ref(null);
 
 let observer = null;
 let intervalId = null;
 
-// Wisselt tussen geluid aan/uit voor de video
 const toggleMute = () => {
   if (!videoRef.value) return;
 
   isMuted.value = !isMuted.value;
   videoRef.value.muted = isMuted.value;
-  // Zet volume op 0.5 als hij niet gedempt is
   videoRef.value.volume = isMuted.value ? 0 : 0.5;
 };
 
-// Handmatige slider navigatie
-const scrollSlider = (direction) => {
-  if (!slider.value) return;
-  const scrollAmount = direction === "left" ? -300 : 300;
-  slider.value.scrollBy({ left: scrollAmount, behavior: "smooth" });
-};
-
-// Genereert de volledige URL voor hero-afbeeldingen
 const getHeroImageUrl = (name) =>
   new URL(`../assets/pictures/hero/${name}`, import.meta.url).href;
 
-// Start de automatische slideshow
+const currentHeroSrc = () =>
+  currentIndex.value === 0
+    ? FIRST_HERO_IMAGE
+    : getHeroImageUrl(heroImages[currentIndex.value - 1]);
+
 const startSlideshow = () => {
   intervalId = setInterval(() => {
-    showImage.value = false; // Start fade-out effect
+    showImage.value = false;
 
-    // Wacht tot fade-out klaar is voordat we de bron wisselen
     setTimeout(() => {
-      currentIndex.value = (currentIndex.value + 1) % heroImages.length;
-      showImage.value = true; // Start fade-in effect
+      currentIndex.value = (currentIndex.value + 1) % (heroImages.length + 1);
+      showImage.value = true;
     }, TRANSITION_DELAY);
   }, SLIDE_DURATION);
 };
 
-// Setup voor de Video Observer (Autoplay wanneer in beeld)
 const setupVideoObserver = () => {
   if (!videoRef.value) return;
 
   observer = new IntersectionObserver(
     ([entry]) => {
       if (entry.isIntersecting) {
-        // Gebruik een promise check om autoplay errors op te vangen
         const playPromise = videoRef.value.play();
         if (playPromise !== undefined) {
           playPromise.catch(() => {
@@ -97,12 +88,10 @@ onMounted(() => {
   startSlideshow();
   setupVideoObserver();
 
-  // Initiële volume instelling
   if (videoRef.value) videoRef.value.volume = 0.5;
 });
 
 onUnmounted(() => {
-  // Voorkom geheugenlekken door timers en observers te stoppen
   if (intervalId) clearInterval(intervalId);
   if (observer) observer.disconnect();
 });
@@ -110,13 +99,14 @@ onUnmounted(() => {
 
 <template>
   <main class="main-home">
-    <!-- Section 1: Hero -->
     <section class="hero">
       <img
-        :src="getHeroImageUrl(heroImages[currentIndex])"
+        :src="currentHeroSrc()"
         :class="['hero-img', { show: showImage }]"
-        :fetchpriority="currentIndex === 0 ? 'high' : 'low'"
-        :loading="currentIndex === 0 ? 'eager' : 'lazy'"
+        fetchpriority="high"
+        loading="eager"
+        width="1920"
+        height="1080"
         alt="Hero Image Artquake"
       />
 
@@ -132,7 +122,6 @@ onUnmounted(() => {
       </router-link>
     </section>
 
-    <!-- Section 2: Stichting Info -->
     <section>
       <h2 class="h2-font">Stichting Villa <em>Artquake</em></h2>
       <span class="line"></span>
@@ -144,7 +133,6 @@ onUnmounted(() => {
       </p>
     </section>
 
-    <!-- Section 3: Video -->
     <section>
       <h2 class="h2-font">Bekijk de <em>video</em> van onze locatie</h2>
       <span class="line"></span>
@@ -156,17 +144,13 @@ onUnmounted(() => {
       <div class="video-container">
         <video
           ref="videoRef"
-          src="../assets/videos/dewi-uitleg.mp4"
           loop
           preload="none"
           playsinline
           muted
           class="custom-video"
         >
-          <source
-            src="https://art-quake.com/wp-content/uploads/2024/02/artquake.mp4"
-            type="video/mp4"
-          />
+          <source src="../assets/videos/dewi-uitleg.mp4" type="video/mp4" />
         </video>
 
         <button
@@ -180,7 +164,6 @@ onUnmounted(() => {
       </div>
     </section>
 
-    <!-- Section 4: Impressie Slider -->
     <section>
       <h2 class="h2-font">Impressie</h2>
       <span class="line"></span>
@@ -191,7 +174,6 @@ onUnmounted(() => {
       <Slider :images="workshopFotos" folder="hero" />
     </section>
 
-    <!-- Section 5: Talent Contact -->
     <section>
       <h2 class="h2-font">
         Heb jij <em>talent?</em> of heb je een <em>andere vraag?</em>
@@ -231,8 +213,6 @@ section {
 
   &:nth-of-type(1) {
     height: 100dvh;
-    background: url("/pictures/hero/meiden-die-zingen.avif") center/cover
-      no-repeat;
 
     .hero-img {
       position: absolute;
@@ -279,7 +259,7 @@ section {
     }
 
     &::after {
-      background: hsla(0, 0%, 0%, 0.6);
+      background: var(--c-overlay-light);
       height: 100%;
       width: 100%;
       content: "";
@@ -297,6 +277,10 @@ section {
 
   &:nth-of-type(4) {
     height: 100vh;
+
+    @media (min-width: 900px) {
+      padding: 5rem max(var(--gap), calc((100vw - var(--content-max)) / 2));
+    }
 
     h2:before {
       content: var(--t-2);
@@ -322,7 +306,7 @@ section {
       max-width: 80%;
       height: 300px;
       object-fit: cover;
-      border-radius: 12px;
+      border-radius: var(--br-lg);
       scroll-snap-align: start;
     }
 
@@ -366,8 +350,30 @@ section {
 
     video {
       max-width: 20rem;
-      /* justify-self: center; */
       margin-top: 2rem;
+    }
+
+    @media (min-width: 900px) {
+      padding: 5rem max(var(--gap), calc((100vw - var(--content-max)) / 2));
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+
+      h2,
+      .line,
+      p {
+        grid-column: 1;
+      }
+
+      .video-container {
+        grid-column: 2;
+        grid-row: 1 / span 3;
+        align-self: center;
+      }
+
+      video {
+        max-width: 100%;
+        margin-top: 0;
+      }
     }
   }
 

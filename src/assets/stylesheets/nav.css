@@ -8,14 +8,13 @@ header {
   }
 
   nav {
+    border-radius: var(--br);
     height: 5rem;
     position: fixed;
     left: 15px;
     right: 15px;
     top: 15px;
-    border-radius: var(--br);
     z-index: 10;
-    /* background-color: hsl(272, 10%, 45%, 0.6); */
     display: flex;
     justify-content: right;
     padding: 0 1rem;
@@ -24,39 +23,34 @@ header {
 
     button {
       background: var(--c-primary);
-      color: white;
-      padding: 0.5rem;
+      color: var(--c-light);
       border-radius: var(--br);
+      padding: 0.5rem;
       z-index: 20;
       border: none;
       cursor: pointer;
     }
 
     .ul-menu {
-      /* Basis instellingen */
       background: var(--c-primary);
       padding: 0 2.5rem 0 1.5rem;
       position: fixed;
-      top: -15px; /* Behoudt je huidige offset */
+      top: -15px;
       left: -15px;
       height: 100vh;
       width: 100vw;
       list-style: none;
-      display: flex; /* Altijd flex, we verplaatsen hem alleen */
+      display: flex;
       flex-direction: column;
       justify-content: center;
       gap: 1rem;
 
-      /* De animatie magie */
-      transform: translateX(
-        100%
-      ); /* Schuif hem volledig naar links uit beeld */
-      transition: transform 0.4s ease-in-out; /* Bepaalt de snelheid en vloeiendheid */
+      transform: translateX(100%);
+      transition: transform 0.4s ease-in-out;
       z-index: 15;
 
-      /* Wanneer isOpen true is (is-open class toegevoegd) */
       &.is-open {
-        transform: translateX(0); /* Schuif terug naar de originele positie */
+        transform: translateX(0);
       }
 
       li:last-of-type {
@@ -91,15 +85,14 @@ header {
   }
 }
 
-/* DESKTOP STYLES */
 @media (min-width: 900px) {
   header nav {
     button {
-      display: none; /* Weg met die hamburger */
+      display: none;
     }
 
     .ul-menu {
-      display: flex !important; /* Altijd tonen op desktop */
+      display: flex !important;
       position: static;
       height: auto;
       background: transparent;
@@ -118,10 +111,10 @@ header {
       a {
         font-size: 1.1rem;
         width: auto;
-        color: white;
+        color: var(--c-light);
 
         &::after {
-          content: none; /* Geen pijltjes op desktop */
+          content: none;
         }
       }
     }

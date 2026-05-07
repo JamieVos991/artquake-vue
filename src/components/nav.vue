@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from "vue"; // Watch toegevoegd
+import { ref, onMounted, watch } from "vue";
 import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter } from "vue-router";
@@ -9,21 +9,17 @@ const isOpen = ref(false);
 const isLoggedIn = ref(false);
 const router = useRouter();
 
-// Check of de gebruiker is ingelogd
 onMounted(() => {
   onAuthStateChanged(auth, (user) => {
     isLoggedIn.value = !!user;
   });
 });
 
-// Watcher om de rest van de pagina 'inert' te maken en scrollen te blokkeren
 watch(isOpen, (newValue) => {
-  const mainContent = document.querySelector("main"); // Of de div die je content bevat (bijv. #app)
+  const mainContent = document.querySelector("main");
 
   if (newValue) {
     document.body.style.overflow = "hidden";
-    // We zorgen dat alles BEHALVE de header/nav inert wordt
-    // Let op: je main content moet idealiter in een apart element zitten naast de header
     if (mainContent) mainContent.setAttribute("inert", "");
   } else {
     document.body.style.overflow = "";

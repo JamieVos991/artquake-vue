@@ -39,7 +39,7 @@ const login = async () => {
 <template>
   <main>
     <section>
-      <label class="label">Login</label>
+      <span class="label">Login</span>
       <h2 class="h2-font">Inloggen</h2>
       <p>
         Ben je de weg kwijt of wil je opnieuw beginnen?
@@ -88,7 +88,7 @@ const login = async () => {
 
 <style scoped>
 .error {
-  color: red;
+  color: var(--c-error);
 }
 
 main {

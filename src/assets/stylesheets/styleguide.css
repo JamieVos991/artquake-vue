@@ -28,12 +28,21 @@
   --c-light: hsl(0, 0%, 100%);
   --c-bg: hsl(0, 0%, 5%);
   --c-bg-alt: hsl(0, 0%, 13%);
-  --c-grey: rgb(152, 152, 152);
+  --c-grey: hsl(0, 0%, 60%);
   --c-pseudo-dark: hsl(0, 0%, 8%);
   --c-pseudo-light: hsl(0, 0%, 14%);
   --c-input: hsl(0, 0%, 14%);
+  --c-input-text: hsl(0, 0%, 79%);
   --c-required: hsl(0, 93%, 39%);
   --c-anchor: hsl(240, 69%, 77%);
+  --c-success: hsl(123, 43%, 32%);
+  --c-success-border: hsl(123, 53%, 23%);
+  --c-error: hsl(0, 63%, 50%);
+  --c-error-border: hsl(0, 73%, 40%);
+  --c-danger: hsl(5, 75%, 57%);
+  --c-danger-hover: hsl(5, 66%, 48%);
+  --c-overlay: hsla(0, 0%, 0%, 0.85);
+  --c-overlay-light: hsla(0, 0%, 0%, 0.7);
 
   --f-size-h1: clamp(2rem, 15vw, 8rem);
   --f-size-h2: clamp(2rem, 12.5vw, 4rem);
@@ -48,6 +57,11 @@
   --lh-p: 1.6;
   --lh-h: 1;
   --br: 0.3rem;
+  --br-lg: 0.75rem;
+
+  --nav-height: 5rem;
+  --gap: 1.5rem;
+  --content-max: 75rem;
 
   --t-1: "INSPIRE";
   --t-2: "GROW";
@@ -62,7 +76,7 @@ body {
 }
 
 main {
-  padding-top: calc(5rem + 50px);
+  padding-top: calc(var(--nav-height) + 50px);
 }
 
 .main-home {
@@ -71,8 +85,8 @@ main {
 
 section {
   display: grid;
-  padding: 1.5rem;
-  gap: 1.5rem;
+  padding: var(--gap);
+  gap: var(--gap);
 }
 
 button {
@@ -103,7 +117,7 @@ h3 {
 }
 
 h2:before {
-  color: var(--c-pseudo);
+  color: var(--c-pseudo-dark);
   font-family: var(--f-family-tanker);
   font-size: var(--f-size-bg);
   position: absolute;
@@ -112,7 +126,6 @@ h2:before {
 }
 
 form {
-  color: var(--c-bg);
   border: 1px solid var(--c-grey);
   color: var(--c-light);
   border-radius: var(--br);
@@ -144,11 +157,11 @@ form {
 input,
 select {
   padding: 0.8rem 0.5rem;
-  color: #cacaca;
+  color: var(--c-input-text);
   width: 100%;
 
   border: none;
-  background: #232323;
+  background: var(--c-input);
 }
 
 select {
@@ -156,7 +169,7 @@ select {
   -moz-appearance: none;
   appearance: none;
 
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23cacaca%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23c9c9c9%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
 
   background-position: right 15px top 50%;
@@ -207,15 +220,34 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.85); /* Donkere achtergrond */
+  background: var(--c-overlay);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10000; /* Zorg dat het overal bovenop ligt */
-  color: white;
-  font-family: "Jost", sans-serif;
+  z-index: 10000;
+  color: var(--c-light);
+  font-family: var(--f-family-jost);
 }
 
-.loading-overlay.hidden {
-  display: none !important;
+@media (min-width: 900px) {
+  section {
+    padding: 5rem max(var(--gap), calc((100vw - var(--content-max)) / 2));
+    gap: 2rem;
+  }
+
+  form {
+    max-width: 40rem;
+  }
+}
+
+.btn-delete {
+  background-color: var(--c-danger);
+  color: var(--c-light);
+  border-radius: var(--br);
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background-color: var(--c-danger-hover);
 }

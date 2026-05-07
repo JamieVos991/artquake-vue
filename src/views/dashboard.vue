@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { auth, db } from "../firebase";
+import { db, storage } from "../firebase";
 import {
   collection,
   getDocs,
@@ -11,14 +11,21 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
-import { signOut } from "firebase/auth";
-import { useRouter } from "vue-router";
-import Spinner from "../components/spinner.vue";
+import {
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+import StatusMessage from "../components/statusmessage.vue";
+import LoadingOverlay from "../components/loadingoverlay.vue";
+import { useStatus } from "../composables/useStatus.js";
 
-const router = useRouter();
+const { status, showStatus } = useStatus();
 
+const loading = ref(false);
 const reservations = ref([]);
 const agendaItems = ref([]);
+const imageFile = ref(null);
 
 const agendaForm = ref({
   band: "",
@@ -27,8 +34,11 @@ const agendaForm = ref({
   startTime: "",
   endTime: "",
   type: "Open entree",
-  imageUrl: "",
 });
+
+const handleImageChange = (e) => {
+  imageFile.value = e.target.files[0] || null;
+};
 
 const fetchReservations = async () => {
   try {
@@ -56,9 +66,21 @@ const fetchAgendaItems = async () => {
 };
 
 const addAgendaItem = async () => {
+  loading.value = true;
   try {
+    let imageUrl = "";
+    if (imageFile.value) {
+      const fileRef = storageRef(
+        storage,
+        `agenda-images/${Date.now()}-${imageFile.value.name}`
+      );
+      await uploadBytes(fileRef, imageFile.value);
+      imageUrl = await getDownloadURL(fileRef);
+    }
+
     await addDoc(collection(db, "agenda"), {
       ...agendaForm.value,
+      imageUrl,
       createdAt: serverTimestamp(),
     });
 
@@ -69,25 +91,28 @@ const addAgendaItem = async () => {
       startTime: "",
       endTime: "",
       type: "Open entree",
-      imageUrl: "",
     };
+    imageFile.value = null;
 
-    alert("Event succesvol toegevoegd!");
+    showStatus("success", "Event succesvol toegevoegd!");
     fetchAgendaItems();
   } catch (error) {
     console.error("Fout bij toevoegen event:", error);
+    showStatus("error", "Fout bij toevoegen event. Probeer opnieuw.");
+  } finally {
+    loading.value = false;
   }
 };
 
-// Agenda item verwijderen
 const deleteAgendaItem = async (id) => {
   if (confirm("Weet je zeker dat je dit agenda-item wilt verwijderen?")) {
     try {
       await deleteDoc(doc(db, "agenda", id));
       agendaItems.value = agendaItems.value.filter((item) => item.id !== id);
-      alert("Agenda item verwijderd.");
+      showStatus("success", "Agenda item verwijderd.");
     } catch (error) {
       console.error("Fout bij verwijderen:", error);
+      showStatus("error", "Fout bij verwijderen. Probeer opnieuw.");
     }
   }
 };
@@ -97,9 +122,10 @@ const deleteReservation = async (id) => {
     try {
       await deleteDoc(doc(db, "reservations", id));
       reservations.value = reservations.value.filter((res) => res.id !== id);
-      alert("reservering verwijderd.");
+      showStatus("success", "Reservering verwijderd.");
     } catch (error) {
       console.error("Fout bij verwijderen:", error);
+      showStatus("error", "Fout bij verwijderen. Probeer opnieuw.");
     }
   }
 };
@@ -124,8 +150,16 @@ const formatDate = (timestamp) => {
 
 <template>
   <main>
+    <StatusMessage
+      :show="status.show"
+      :type="status.type"
+      :message="status.message"
+    />
+
+    <LoadingOverlay :show="loading" />
+
     <section>
-      <label class="label">Dashboard</label>
+      <span class="label">Dashboard</span>
       <h2 class="h2-font">Beheer</h2>
 
       <h3>Agenda Item Toevoegen</h3>
@@ -133,12 +167,12 @@ const formatDate = (timestamp) => {
         <fieldset>
           <legend>Informatie</legend>
 
-          <label for="image">Afbeelding URL</label>
+          <label for="image">Afbeelding</label>
           <input
-            v-model="agendaForm.imageUrl"
-            type="text"
+            type="file"
             id="image"
-            placeholder="https://link-naar-foto.png"
+            accept="image/*"
+            @change="handleImageChange"
           />
 
           <label for="band">Band</label>
@@ -185,7 +219,9 @@ const formatDate = (timestamp) => {
             <option value="Gesloten entree">Gesloten entree</option>
           </select>
 
-          <button class="btn" type="submit">Voeg het item toe</button>
+          <button class="btn" type="submit" :disabled="loading">
+            {{ loading ? "Bezig..." : "Voeg het item toe" }}
+          </button>
         </fieldset>
       </form>
 
@@ -240,6 +276,12 @@ select {
   margin-bottom: 1rem;
 }
 
+@media (min-width: 900px) {
+  section {
+    max-width: 65rem;
+  }
+}
+
 hr {
   margin: 3rem 0;
   border: 0;
@@ -258,19 +300,6 @@ table td {
   padding: 0.8em;
   border: 1px solid var(--c-grey);
   text-align: left;
-}
-
-.btn-delete {
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.btn-delete:hover {
-  background-color: #c0392b;
 }
 
 @media screen and (max-width: 600px) {

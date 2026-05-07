@@ -26,21 +26,21 @@ defineProps({
   left: 1rem;
   right: 1rem;
   padding: 1rem 1.5rem;
-  border-radius: 8px;
+  border-radius: var(--br);
   display: flex;
   align-items: center;
-  color: white;
+  color: var(--c-light);
   z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px var(--c-overlay);
 }
 
 .success {
-  background-color: #2e7d32;
-  border: 1px solid #1b5e20;
+  background-color: var(--c-success);
+  border: 1px solid var(--c-success-border);
 }
 .error {
-  background-color: #d32f2f;
-  border: 1px solid #b71c1c;
+  background-color: var(--c-error);
+  border: 1px solid var(--c-error-border);
 }
 
 .fade-enter-active,

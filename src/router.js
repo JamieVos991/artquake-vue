@@ -2,7 +2,6 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { auth } from './firebase' 
 import { onAuthStateChanged } from "firebase/auth"
 
-// Importeer je views
 import Home from './views/Home.vue'
 import Organisatie from './views/organisatie.vue'
 import Crew from './views/crew.vue'
@@ -33,7 +32,6 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
-    // meta: { requiresAuth: true }
   },
   { path: '/:pathMatch(.*)*', name: 'NotFoundPagina', component: NotFoundPagina },
 ]

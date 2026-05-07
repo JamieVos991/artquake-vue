@@ -6,7 +6,7 @@ const sliderImages = ["1.avif", "2.avif", "3.avif", "4.avif", "5.avif"];
 <template>
   <main>
     <section>
-      <label class="label" for="">Activiteiten</label>
+      <span class="label">Activiteiten</span>
       <h2 class="h2-font"><em>Ontdek</em> wat er te beleven valt</h2>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora iste,
@@ -72,3 +72,19 @@ const sliderImages = ["1.avif", "2.avif", "3.avif", "4.avif", "5.avif"];
     </section>
   </main>
 </template>
+
+<style scoped>
+@media (min-width: 900px) {
+  section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 4rem;
+
+    .label,
+    h2,
+    > p:first-of-type {
+      grid-column: 1 / -1;
+    }
+  }
+}
+</style>

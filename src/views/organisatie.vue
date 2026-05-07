@@ -1,7 +1,7 @@
 <template>
   <main>
     <section>
-      <label class="label" for="">Organisatie</label>
+      <span class="label">Organisatie</span>
       <h2 class="h2-font">Voorbeeld titel tekst tekst tekst tekst</h2>
       <p>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Illum,

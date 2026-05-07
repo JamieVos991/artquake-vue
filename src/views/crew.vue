@@ -3,7 +3,7 @@
 <template>
   <main class="main-nav">
     <section>
-      <label class="label" for="">Crew</label>
+      <span class="label">Crew</span>
       <h2 class="h2-font">De <em>drijvende kracht</em> achter de schermen</h2>
       <p>
         De crew is het hart van het team. Samen werken ze hard, helpen ze elkaar
@@ -52,6 +52,18 @@ article {
 
   p {
     color: var(--c-secondary);
+  }
+}
+
+@media (min-width: 900px) {
+  section {
+    grid-template-columns: repeat(3, 1fr);
+
+    .label,
+    h2,
+    > p {
+      grid-column: 1 / -1;
+    }
   }
 }
 </style>

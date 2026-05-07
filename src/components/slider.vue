@@ -2,12 +2,10 @@
 import { ref } from "vue";
 
 const props = defineProps({
-  // De lijst met bestandsnamen: ['foto1.jpg', 'foto2.jpg']
   images: {
     type: Array,
     required: true,
   },
-  // De submap in assets/pictures/ waar de foto's staan
   folder: {
     type: String,
     default: "hero",
@@ -18,12 +16,10 @@ const slider = ref(null);
 
 const scrollSlider = (direction) => {
   if (!slider.value) return;
-  // We berekenen de scroll-afstand op basis van de breedte van de slider
   const scrollAmount = direction === "left" ? -300 : 300;
   slider.value.scrollBy({ left: scrollAmount, behavior: "smooth" });
 };
 
-// Helper om de juiste asset URL te bouwen
 const getImageUrl = (name) => {
   return new URL(`../assets/pictures/${props.folder}/${name}`, import.meta.url)
     .href;
@@ -32,7 +28,6 @@ const getImageUrl = (name) => {
 
 <template>
   <div class="slider-wrapper">
-    <!-- Navigatie Knoppen -->
     <button
       @click="scrollSlider('left')"
       class="nav prev"
@@ -41,7 +36,6 @@ const getImageUrl = (name) => {
       <img src="../assets/svg/chevron-left.svg" alt="Vorige" />
     </button>
 
-    <!-- De scrollbare container -->
     <div class="slider" ref="slider">
       <img
         v-for="(img, index) in images"
@@ -76,11 +70,9 @@ const getImageUrl = (name) => {
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   padding-bottom: 1rem;
-  /* Verberg scrollbar voor Chrome/Safari */
   &::-webkit-scrollbar {
     display: none;
   }
-  /* Verberg scrollbar voor Firefox */
   scrollbar-width: none;
 }
 
@@ -89,7 +81,7 @@ const getImageUrl = (name) => {
   max-width: 80%;
   height: 300px;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: var(--br-lg);
   scroll-snap-align: start;
 }
 
@@ -124,7 +116,7 @@ const getImageUrl = (name) => {
 
 @media (min-width: 900px) {
   .slider img {
-    flex: 0 0 40%; /* Op desktop tonen we meer foto's tegelijk */
+    flex: 0 0 40%;
     max-width: 40%;
   }
 }

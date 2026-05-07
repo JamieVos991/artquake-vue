@@ -3,7 +3,7 @@
 <template>
   <main>
     <section>
-      <label class="label" for="">Artiesten</label>
+      <span class="label">Artiesten</span>
       <h2 class="h2-font">De <em>makers</em> van nu</h2>
       <p>
         Artquake bestaat uit talloze getalenteerde artiesten, die zowel op het
@@ -103,7 +103,7 @@ section:nth-of-type(2) {
   width: 100%;
   display: flex;
   place-content: center;
-  gap: 4rem;
+  gap: 2rem;
   flex-wrap: wrap;
 }
 
@@ -118,6 +118,16 @@ article {
     aspect-ratio: 1/1;
     max-width: 25rem;
     border-radius: var(--br);
+  }
+}
+
+@media (min-width: 900px) {
+  section:nth-of-type(2) {
+    gap: 2rem;
+  }
+
+  article img {
+    max-width: 16rem;
   }
 }
 </style>
