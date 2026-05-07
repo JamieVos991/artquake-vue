@@ -11,10 +11,22 @@ const fetchEvents = async () => {
   try {
     const q = query(collection(db, "agenda"), orderBy("date", "asc"));
     const querySnapshot = await getDocs(q);
-    events.value = querySnapshot.docs.map((doc) => ({
+
+    // Get today's date at 00:00:00 for a fair comparison
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const allEvents = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
+
+    // Filter: only keep events where the date is today or in the future
+    events.value = allEvents.filter((event) => {
+      if (!event.date) return false;
+      const eventDate = new Date(event.date);
+      return eventDate >= today;
+    });
   } catch (error) {
     console.error("Fout bij ophalen events:", error);
   } finally {
@@ -68,7 +80,7 @@ const formatDisplayDate = (dateStr) => {
         </li>
       </ul>
 
-      <p v-else>Er zijn momenteel geen evenementen gepland.</p>
+      <b v-else>Er zijn momenteel geen evenementen gepland.</b>
     </section>
   </main>
 </template>
@@ -86,6 +98,7 @@ li {
   min-height: 10rem;
   margin-top: 4rem;
   background-color: #363636;
+  border-left: 3px solid var(--c-secondary);
   position: relative;
   display: flex;
   list-style: none;
