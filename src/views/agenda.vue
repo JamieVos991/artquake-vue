@@ -63,12 +63,12 @@ const formatDisplayDate = (dateStr) => {
             '--band-image': `url(${event.imageUrl || 'default-image.png'})`,
           }"
         >
-          <div>
+          <figure>
             <img
               :src="event.imageUrl || 'default-image.png'"
               alt="Event image"
             />
-          </div>
+          </figure>
           <div>
             <p>{{ event.band }}</p>
             <p>{{ event.place }}</p>
@@ -106,6 +106,9 @@ li {
   list-style: none;
   align-items: center;
   z-index: 0;
+  animation: fadeInUp linear both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 40%;
 
   &::before {
     content: var(--band-date);

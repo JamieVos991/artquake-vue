@@ -4,7 +4,7 @@ import emailjs from "@emailjs/browser";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import StatusMessage from "../components/statusmessage.vue";
-import LoadingOverlay from "../components/loadingoverlay.vue";
+import LoadingOverlay from "../components/LoadingOverlay.vue";
 import { useStatus } from "../composables/useStatus.js";
 
 const { status, showStatus } = useStatus();
@@ -267,7 +267,7 @@ const handleSubmit = async () => {
         />
 
         <button class="btn" type="submit" :disabled="loading">
-          {{ loading ? "Bezig..." : "Bevestig Reservering" }}
+          {{ loading ? "Bezig..." : "Bevestig reservering" }}
         </button>
       </form>
     </section>

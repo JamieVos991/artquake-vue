@@ -11,16 +11,16 @@ defineProps({
 
 <template>
   <Transition name="fade">
-    <div v-if="show" :class="['status-message', type]">
+    <output v-if="show" :class="['status-message', type]" :role="type === 'error' ? 'alert' : 'status'">
       <span v-if="type === 'success'"></span>
       <span v-else>⚠️</span>
       <p>{{ message }}</p>
-    </div>
+    </output>
   </Transition>
 </template>
 
 <style scoped>
-.status-message {
+output.status-message {
   position: fixed;
   top: 1rem;
   left: 1rem;

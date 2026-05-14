@@ -75,18 +75,18 @@ body {
   font-family: var(--f-family-jost);
 }
 
+section {
+  display: grid;
+  padding: 1.5rem;
+  gap: 1.5rem;
+}
+
 main {
   padding-top: calc(var(--nav-height) + 50px);
 }
 
 .main-home {
   padding-top: 0;
-}
-
-section {
-  display: grid;
-  padding: var(--gap);
-  gap: var(--gap);
 }
 
 button {
@@ -117,12 +117,15 @@ h3 {
 }
 
 h2:before {
+  display: block;
   color: var(--c-pseudo-dark);
   font-family: var(--f-family-tanker);
   font-size: var(--f-size-bg);
-  position: absolute;
+  line-height: 1;
+  position: relative;
   z-index: -1;
-  top: -5rem;
+  margin-block-end: -3rem;
+  pointer-events: none;
 }
 
 form {
@@ -200,10 +203,28 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-color: var(--c-primary);
   color: var(--c-light);
   border-radius: var(--br);
-
   width: fit-content;
   padding: 0.7rem 1.5rem;
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    hsla(0, 0%, 100%, 0.25) 50%,
+    transparent 60%
+  );
+  transform: translateX(-100%) skewX(-15deg);
+}
+
+.btn:hover::after {
+  animation: shimmer 0.5s ease forwards;
 }
 
 .label {
@@ -230,11 +251,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 @media (min-width: 900px) {
-  section {
-    padding: 5rem max(var(--gap), calc((100vw - var(--content-max)) / 2));
-    gap: 2rem;
-  }
-
   form {
     max-width: 40rem;
   }

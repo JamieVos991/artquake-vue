@@ -1,4 +1,5 @@
 import './assets/stylesheets/styleguide.css'
+import './assets/stylesheets/animations.css'
 
 import router from './router'
 

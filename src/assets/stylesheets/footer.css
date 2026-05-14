@@ -4,8 +4,12 @@ footer {
   padding: 2.5rem 1.5rem;
   gap: 2rem;
 
-  img {
+  img:first-of-type {
     width: 8rem;
+  }
+
+  img:last-of-type {
+    width: 100%;
   }
 
   a {
@@ -17,7 +21,15 @@ footer {
     gap: 0.3rem;
   }
 
-  div {
+  nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0;
+  }
+
+  nav:last-of-type {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -34,13 +46,12 @@ footer {
     img:last-of-type {
       grid-column: 2;
       grid-row: 1 / span 4;
-      width: 100%;
       object-fit: cover;
       border-radius: var(--br-lg);
       max-height: 28rem;
     }
 
-    div:last-of-type {
+    nav:last-of-type {
       grid-column: 1;
     }
   }

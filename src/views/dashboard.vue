@@ -17,7 +17,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import StatusMessage from "../components/statusmessage.vue";
-import LoadingOverlay from "../components/loadingoverlay.vue";
+import LoadingOverlay from "../components/LoadingOverlay.vue";
 import { useStatus } from "../composables/useStatus.js";
 
 const { status, showStatus } = useStatus();
@@ -226,19 +226,26 @@ const formatDate = (timestamp) => {
       </form>
 
       <h3>Bestaande Agenda Items</h3>
-      <div v-if="agendaItems.length > 0">
-        <div v-for="item in agendaItems" :key="item.id">
-          <div data-label="Band">
-            <strong>{{ item.band }}</strong>
-          </div>
-          <div data-label="Datum">{{ item.date }}</div>
-          <div data-label="Acties">
-            <button @click="deleteAgendaItem(item.id)" class="btn-delete">
-              Verwijder
-            </button>
-          </div>
-        </div>
-      </div>
+      <table v-if="agendaItems.length > 0">
+        <thead>
+          <tr>
+            <th>Band</th>
+            <th>Datum</th>
+            <th>Acties</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in agendaItems" :key="item.id">
+            <td data-label="Band"><strong>{{ item.band }}</strong></td>
+            <td data-label="Datum">{{ item.date }}</td>
+            <td data-label="Acties">
+              <button @click="deleteAgendaItem(item.id)" class="btn-delete">
+                Verwijder
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <p v-else>Geen agenda items gevonden.</p>
 
       <h3>Reserveringen</h3>

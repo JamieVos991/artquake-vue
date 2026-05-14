@@ -5,9 +5,8 @@ import Slider from "../components/slider.vue";
 const SLIDE_DURATION = 3000;
 const TRANSITION_DELAY = 300;
 
-const FIRST_HERO_IMAGE = "/pictures/hero/meiden-die-zingen.avif";
-
 const heroImages = [
+  "meiden-die-zingen.avif",
   "interieur-tekening.avif",
   "meid-die-zingt.avif",
   "optreden.avif",
@@ -44,17 +43,12 @@ const toggleMute = () => {
 const getHeroImageUrl = (name) =>
   new URL(`../assets/pictures/hero/${name}`, import.meta.url).href;
 
-const currentHeroSrc = () =>
-  currentIndex.value === 0
-    ? FIRST_HERO_IMAGE
-    : getHeroImageUrl(heroImages[currentIndex.value - 1]);
-
 const startSlideshow = () => {
   intervalId = setInterval(() => {
     showImage.value = false;
 
     setTimeout(() => {
-      currentIndex.value = (currentIndex.value + 1) % (heroImages.length + 1);
+      currentIndex.value = (currentIndex.value + 1) % heroImages.length;
       showImage.value = true;
     }, TRANSITION_DELAY);
   }, SLIDE_DURATION);
@@ -101,7 +95,7 @@ onUnmounted(() => {
   <main class="main-home">
     <section class="hero">
       <img
-        :src="currentHeroSrc()"
+        :src="getHeroImageUrl(heroImages[currentIndex])"
         :class="['hero-img', { show: showImage }]"
         fetchpriority="high"
         loading="eager"
@@ -141,11 +135,11 @@ onUnmounted(() => {
         contact met makers.
       </p>
 
-      <div class="video-container">
+      <figure class="video-container">
         <video
           ref="videoRef"
           loop
-          preload="none"
+          preload="metadata"
           playsinline
           muted
           class="custom-video"
@@ -161,7 +155,7 @@ onUnmounted(() => {
           <span v-if="isMuted">🔇</span>
           <span v-else>🔉</span>
         </button>
-      </div>
+      </figure>
     </section>
 
     <section>
@@ -192,9 +186,9 @@ onUnmounted(() => {
 <style scoped>
 section {
   position: relative;
-  min-height: 80vh;
   place-content: center;
   justify-content: left;
+  padding: 5rem 1.5rem;
 
   .line {
     background: var(--c-primary);
@@ -247,7 +241,8 @@ section {
     }
 
     h1 {
-      animation-delay: 0.2s;
+      animation: fadeInUp 0.8s ease-out 0.2s forwards,
+        glitch 3s ease-in-out 2s infinite;
     }
 
     p {
@@ -276,12 +271,6 @@ section {
   }
 
   &:nth-of-type(4) {
-    height: 100vh;
-
-    @media (min-width: 900px) {
-      padding: 5rem max(var(--gap), calc((100vw - var(--content-max)) / 2));
-    }
-
     h2:before {
       content: var(--t-2);
       color: var(--c-pseudo-dark);
@@ -340,9 +329,6 @@ section {
   }
 
   &:nth-of-type(3) {
-    padding: 8rem 1.5rem;
-    position: relative;
-
     h2:before {
       content: var(--t-3);
       color: var(--c-pseudo-light);
@@ -354,7 +340,6 @@ section {
     }
 
     @media (min-width: 900px) {
-      padding: 5rem max(var(--gap), calc((100vw - var(--content-max)) / 2));
       grid-template-columns: 1fr 1fr;
       align-items: center;
 

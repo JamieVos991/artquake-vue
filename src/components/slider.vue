@@ -36,15 +36,15 @@ const getImageUrl = (name) => {
       <img src="../assets/svg/chevron-left.svg" alt="Vorige" />
     </button>
 
-    <div class="slider" ref="slider">
-      <img
-        v-for="(img, index) in images"
-        :key="index"
-        :src="getImageUrl(img)"
-        :alt="'Impressie foto ' + (index + 1)"
-        loading="lazy"
-      />
-    </div>
+    <ul class="slider" ref="slider">
+      <li v-for="(img, index) in images" :key="index">
+        <img
+          :src="getImageUrl(img)"
+          :alt="'Impressie foto ' + (index + 1)"
+          loading="lazy"
+        />
+      </li>
+    </ul>
 
     <button
       @click="scrollSlider('right')"
@@ -70,19 +70,25 @@ const getImageUrl = (name) => {
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   padding-bottom: 1rem;
+  list-style: none;
+  padding-left: 0;
   &::-webkit-scrollbar {
     display: none;
   }
   scrollbar-width: none;
 }
 
-.slider img {
+.slider li {
   flex: 0 0 80%;
   max-width: 80%;
+  scroll-snap-align: start;
+}
+
+.slider img {
+  width: 100%;
   height: 300px;
   object-fit: cover;
   border-radius: var(--br-lg);
-  scroll-snap-align: start;
 }
 
 .nav {
@@ -115,7 +121,7 @@ const getImageUrl = (name) => {
 }
 
 @media (min-width: 900px) {
-  .slider img {
+  .slider li {
     flex: 0 0 40%;
     max-width: 40%;
   }
