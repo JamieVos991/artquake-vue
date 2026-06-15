@@ -40,6 +40,13 @@ const handleSubmit = async () => {
     isSending.value = false;
   }
 };
+
+const contactInfo = [
+  { icon: "📍", label: "Adres",      value: "Artquake, Creative Space" },
+  { icon: "📧", label: "E-mail",     value: "info@art-quake.com" },
+  { icon: "📞", label: "Telefoon",   value: "+31 6 00 00 00 00" },
+  { icon: "🕐", label: "Openingstijden", value: "Ma – Za: 08:30 – 21:30" },
+];
 </script>
 
 <template>
@@ -53,16 +60,32 @@ const handleSubmit = async () => {
     <LoadingOverlay :show="isSending" label="Bericht verzenden..." />
 
     <section>
-      <span class="label">Formulier</span>
-      <h2 class="h2-font">Stel <em>je vraag</em> aan ons team</h2>
-      <p>
-        De crew is het hart van het team. Samen werken ze hard, helpen ze elkaar
-        en zorgen ze dat alles soepel verloopt.
-      </p>
 
+      <!-- Linker kolom: intro -->
+      <div class="intro">
+        <span class="label">Contact</span>
+        <h2 class="h2-font">Stel <em>je vraag</em> aan ons team</h2>
+        <span class="line"></span>
+        <p>
+          Heb je een vraag, idee of wil je meer weten over onze studio's?
+          We helpen je graag verder.
+        </p>
+
+        <div class="contact-cards">
+          <div v-for="item in contactInfo" :key="item.label" class="contact-card">
+            <span class="contact-icon">{{ item.icon }}</span>
+            <div>
+              <span class="contact-label">{{ item.label }}</span>
+              <span class="contact-value">{{ item.value }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rechter kolom: formulier -->
       <form @submit.prevent="handleSubmit">
         <fieldset>
-          <legend>Contactgegevens</legend>
+          <legend>Stap 1 — Jouw gegevens</legend>
 
           <label for="naam">Voor- en achternaam</label>
           <input
@@ -89,42 +112,124 @@ const handleSubmit = async () => {
             type="tel"
             placeholder="0612345678"
           />
+        </fieldset>
+
+        <fieldset>
+          <legend>Stap 2 — Je bericht</legend>
 
           <label for="bericht">Bericht</label>
-          <input
-            type="text"
+          <textarea
             id="bericht"
             v-model="formData.bericht"
             placeholder="Hoe kunnen we je helpen?"
+            rows="5"
             required
           />
         </fieldset>
 
-        <button type="submit" class="btn" :disabled="isSending">
-          {{ isSending ? "Bezig..." : "Verstuur" }}
+        <button type="submit" class="btn submit-btn" :disabled="isSending">
+          {{ isSending ? "Bezig..." : "Verstuur bericht" }}
         </button>
       </form>
+
     </section>
   </main>
 </template>
 
 <style scoped>
-@media (min-width: 900px) {
-  section {
+/* ── Layout ─────────────────────────────────── */
+section {
+  display: grid;
+  gap: 3rem;
+  align-items: start;
+
+  @media (min-width: 900px) {
     grid-template-columns: 1fr 1fr;
-    align-items: start;
+  }
+}
 
-    .label,
-    h2 {
-      grid-column: 1 / -1;
-    }
+/* ── Intro kolom ─────────────────────────────── */
+.intro {
+  display: grid;
+  gap: 1.25rem;
+}
 
-    form {
-      grid-column: 2;
-      grid-row: 3 / span 2;
-      align-self: start;
-    }
+.contact-cards {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.contact-card {
+  background: var(--c-bg-alt);
+  border: 1px solid hsla(0,0%,100%,0.08);
+  border-radius: var(--br-lg);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.contact-icon {
+  font-size: 1.4rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: hsla(0,0%,100%,0.06);
+  border-radius: var(--br);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contact-label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: hsla(0,0%,100%,0.35);
+  margin-bottom: 0.15rem;
+}
+
+.contact-value {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--c-light);
+}
+
+/* ── Formulier ───────────────────────────────── */
+form {
+  max-width: 100%;
+
+  fieldset legend {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-grey);
+    padding-bottom: 1rem;
+  }
+}
+
+textarea {
+  padding: 0.8rem;
+  color: var(--c-input-text);
+  width: 100%;
+  border: none;
+  background: var(--c-input);
+  resize: vertical;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.submit-btn {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  margin-top: 0.5rem;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 </style>
-

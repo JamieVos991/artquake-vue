@@ -81,6 +81,13 @@ section {
   gap: 1.5rem;
 }
 
+.line {
+  background: var(--c-primary);
+  width: 4rem;
+  height: 3px;
+  border-radius: var(--br);
+}
+
 main {
   padding-top: calc(var(--nav-height) + 50px);
 }
@@ -210,6 +217,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   overflow: hidden;
 }
 
+.btn-outline {
+  background-color: transparent;
+  border: 1.5px solid hsla(0, 0%, 100%, 0.45);
+  color: var(--c-light);
+}
+
+.btn-outline:hover {
+  background-color: hsla(0, 0%, 100%, 0.1);
+  border-color: hsla(0, 0%, 100%, 0.7);
+}
+
 .btn::after {
   content: "";
   position: absolute;
@@ -251,6 +269,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 @media (min-width: 900px) {
+  section {
+    padding: 6rem max(var(--gap), calc((100vw - var(--content-max)) / 2));
+    gap: 2rem;
+  }
+
   form {
     max-width: 40rem;
   }

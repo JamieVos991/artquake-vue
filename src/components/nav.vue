@@ -1,23 +1,32 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, nextTick } from "vue";
 import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import "../assets/stylesheets/nav.css";
 
 const isOpen = ref(false);
 const isLoggedIn = ref(false);
 const router = useRouter();
+const route = useRoute();
+
+const ulRef = ref(null);
+const bubble = ref({ left: 0, width: 0, opacity: 0 });
 
 onMounted(() => {
   onAuthStateChanged(auth, (user) => {
     isLoggedIn.value = !!user;
   });
+  nextTick(() => {
+    moveBubbleToActive();
+    setTimeout(moveBubbleToActive, 150);
+  });
 });
+
+watch(() => route.path, () => nextTick(() => moveBubbleToActive()));
 
 watch(isOpen, (newValue) => {
   const mainContent = document.querySelector("main");
-
   if (newValue) {
     document.body.style.overflow = "hidden";
     if (mainContent) mainContent.setAttribute("inert", "");
@@ -40,6 +49,27 @@ const handleLogout = async () => {
     console.error("Fout bij uitloggen:", error);
   }
 };
+
+const moveBubbleTo = (el) => {
+  if (!ulRef.value || !el) return;
+  const ulRect = ulRef.value.getBoundingClientRect();
+  const elRect = el.getBoundingClientRect();
+  bubble.value = {
+    left: elRect.left - ulRect.left,
+    width: elRect.width,
+    opacity: 1,
+  };
+};
+
+const moveBubbleToActive = () => {
+  if (!ulRef.value) return;
+  const active = ulRef.value.querySelector("a.router-link-active");
+  if (active) moveBubbleTo(active);
+  else bubble.value.opacity = 0;
+};
+
+const onLinkEnter = (e) => moveBubbleTo(e.currentTarget);
+const onNavLeave = () => moveBubbleToActive();
 </script>
 
 <template>
@@ -87,47 +117,37 @@ const handleLogout = async () => {
         </svg>
       </button>
 
-      <ul :class="['ul-menu', { 'is-open': isOpen }]">
-        <li><router-link to="/" @click="isOpen = false">Home</router-link></li>
-        <li>
-          <router-link to="/activiteiten" @click="isOpen = false"
-            >Activiteiten</router-link
-          >
-        </li>
-        <li>
-          <router-link to="/agenda" @click="isOpen = false">Agenda</router-link>
-        </li>
-        <li>
-          <router-link to="/artiesten" @click="isOpen = false"
-            >Artiesten</router-link
-          >
-        </li>
-        <li>
-          <router-link to="/crew" @click="isOpen = false">Crew</router-link>
-        </li>
+      <ul
+        ref="ulRef"
+        :class="['ul-menu', { 'is-open': isOpen }]"
+        @mouseleave="onNavLeave"
+      >
+        <div
+          class="nav-bubble"
+          :style="{
+            left: bubble.left + 'px',
+            width: bubble.width + 'px',
+            opacity: bubble.opacity,
+          }"
+        />
 
-        <li>
-          <router-link to="/reserveren" @click="isOpen = false"
-            >Reserveren</router-link
-          >
-        </li>
-        <li>
-          <router-link to="/contact" @click="isOpen = false">
-            Contact
-          </router-link>
-        </li>
+        <li><router-link to="/" @mouseenter="onLinkEnter" @click="isOpen = false">Home</router-link></li>
+        <li><router-link to="/activiteiten" @mouseenter="onLinkEnter" @click="isOpen = false">Activiteiten</router-link></li>
+        <li><router-link to="/agenda" @mouseenter="onLinkEnter" @click="isOpen = false">Agenda</router-link></li>
+        <li><router-link to="/artiesten" @mouseenter="onLinkEnter" @click="isOpen = false">Artiesten</router-link></li>
+        <li><router-link to="/crew" @mouseenter="onLinkEnter" @click="isOpen = false">Crew</router-link></li>
+        <li><router-link to="/reserveren" @mouseenter="onLinkEnter" @click="isOpen = false">Reserveren</router-link></li>
+        <li><router-link to="/contact" @mouseenter="onLinkEnter" @click="isOpen = false">Contact</router-link></li>
         <li>
           <a
-            href="/"
             style="cursor: pointer"
             v-if="isLoggedIn"
             @click="handleLogout"
+            @mouseenter="onLinkEnter"
             >Uitloggen</a
           >
-          <router-link v-else to="/Login" @click="isOpen = false"
-            >Login</router-link
-          >
-          <a v-if="isLoggedIn" href="/dashboard">Dashboard</a>
+          <router-link v-else to="/Login" @click="isOpen = false" @mouseenter="onLinkEnter">Login</router-link>
+          <a v-if="isLoggedIn" href="/dashboard" @mouseenter="onLinkEnter">Dashboard</a>
         </li>
       </ul>
     </nav>

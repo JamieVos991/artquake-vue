@@ -34,24 +34,31 @@ const login = async () => {
     }
   }
 };
+
 </script>
 
 <template>
   <main>
     <section>
-      <span class="label">Login</span>
-      <h2 class="h2-font">Inloggen</h2>
-      <p>
-        Ben je de weg kwijt of wil je opnieuw beginnen?
-        <a href="/">Klik hier</a> om veilig terug te keren naar de hoofdpagina.
-      </p>
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 
+      <!-- Linker kolom: intro -->
+      <div class="intro">
+        <span class="label">Login</span>
+        <h2 class="h2-font"><em>Welkom</em> terug</h2>
+        <span class="line"></span>
+        <p>
+          Log in om toegang te krijgen tot het Artquake dashboard.
+          Alleen voor crew en beheerders.
+        </p>
+
+      </div>
+
+      <!-- Rechter kolom: formulier -->
       <form @submit.prevent="login">
         <fieldset>
-          <legend>Gegevens</legend>
+          <legend>Inloggegevens</legend>
 
-          <label for="email">Email</label>
+          <label for="email">E-mailadres</label>
           <input
             id="email"
             v-model="email"
@@ -64,7 +71,7 @@ const login = async () => {
           <div class="password-wrapper">
             <input
               id="password"
-              placeholder="••••"
+              placeholder="••••••••"
               v-model="password"
               :type="showPassword ? 'text' : 'password'"
               required
@@ -75,62 +82,82 @@ const login = async () => {
               @click="togglePassword"
               tabindex="-1"
             >
-              <span v-if="showPassword">🙈</span>
-              <span v-else>👁️</span>
+              {{ showPassword ? '🙈' : '👁️' }}
             </button>
           </div>
         </fieldset>
-        <button class="btn" type="submit">Login</button>
+
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+
+        <button class="btn submit-btn" type="submit">Inloggen</button>
       </form>
+
     </section>
   </main>
 </template>
 
 <style scoped>
-.error {
-  color: var(--c-error);
-}
-
-main {
-  display: grid;
-  place-content: center;
-}
-
+/* ── Layout ─────────────────────────────────── */
 section {
-  max-width: 30rem;
-  padding-bottom: 40px;
+  display: grid;
+  gap: 3rem;
+  align-items: start;
+
+  @media (min-width: 900px) {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
-a {
-  color: var(--c-anchor);
+/* ── Intro kolom ─────────────────────────────── */
+.intro {
+  display: grid;
+  gap: 1.25rem;
+}
+
+/* ── Formulier ───────────────────────────────── */
+form {
+  max-width: 100%;
+
+  fieldset legend {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-grey);
+    padding-bottom: 1rem;
+  }
 }
 
 .password-wrapper {
   position: relative;
   display: flex;
   align-items: center;
-}
 
-.password-wrapper input {
-  width: 100%;
-  padding-right: 40px;
+  input {
+    width: 100%;
+    padding-right: 3rem;
+  }
 }
 
 .toggle-button {
   position: absolute;
-  right: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
+  right: 0.75rem;
   font-size: 1.2rem;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.7;
+  opacity: 0.6;
+  cursor: pointer;
+
+  &:hover { opacity: 1; }
 }
 
-.toggle-button:hover {
-  opacity: 1;
+.error {
+  color: var(--c-error);
+  font-size: 0.9rem;
+  margin-top: -0.5rem;
+}
+
+.submit-btn {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  margin-top: 0.5rem;
 }
 </style>

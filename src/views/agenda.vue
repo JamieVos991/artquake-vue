@@ -43,16 +43,17 @@ const formatDisplayDate = (dateStr) => {
 
 <template>
   <main>
-    <section>
+    <section :class="{ 'is-empty': !isLoading && events.length === 0 }">
       <span class="label">Agenda</span>
       <h2 class="h2-font">Aankomende <em>events</em> van Artquake</h2>
+      <span class="line"></span>
       <p>
         Hieronder vind je een overzicht van alle aankomende evenementen en
         activiteiten die we organiseren. Volg ons op Instagram voor de verdere
         inhoud per activiteit en het laatste nieuws!
       </p>
 
-      <Spinner v-if="isLoading" label="Events ophalen..." />
+      <Spinner v-if="isLoading" label="" />
 
       <ul v-else-if="events.length > 0">
         <li
@@ -77,7 +78,12 @@ const formatDisplayDate = (dateStr) => {
         </li>
       </ul>
 
-      <b v-else>Er zijn momenteel geen evenementen gepland.</b>
+      <div v-else class="empty-state">
+        <span class="empty-icon">🎭</span>
+        <h3 class="h3-font">Geen evenementen gepland</h3>
+        <p>Op dit moment staan er geen activiteiten in de agenda. Volg ons op Instagram voor het laatste nieuws!</p>
+        <a href="https://www.instagram.com/artquake_nl" target="_blank" rel="noopener" class="btn">Volg ons op Instagram</a>
+      </div>
     </section>
   </main>
 </template>
@@ -85,6 +91,54 @@ const formatDisplayDate = (dateStr) => {
 <style scoped>
 section {
   padding-bottom: 3rem;
+  min-height: 75vh;
+  align-content: start;
+}
+
+section.is-empty {
+  > *:not(.empty-state) {
+    filter: blur(6px);
+    opacity: 0.4;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .empty-state {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    width: min(36rem, 90vw);
+    padding: 4rem 3rem;
+  }
+}
+
+section {
+  position: relative;
+}
+
+.empty-state {
+  display: grid;
+  gap: 1.2rem;
+  padding: 3rem 2rem;
+  border: 1px solid hsla(0, 0%, 100%, 0.12);
+  border-radius: var(--br-lg);
+  background: hsla(0, 0%, 8%, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  text-align: center;
+  place-items: center;
+
+  .empty-icon {
+    font-size: 3.5rem;
+    line-height: 1;
+  }
+
+  p {
+    color: var(--c-grey);
+    max-width: 28rem;
+  }
 }
 
 ul {

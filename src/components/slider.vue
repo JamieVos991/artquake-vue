@@ -122,8 +122,12 @@ const getImageUrl = (name) => {
 
 @media (min-width: 900px) {
   .slider li {
-    flex: 0 0 40%;
-    max-width: 40%;
+    flex: 0 0 38%;
+    max-width: 38%;
+  }
+
+  .slider img {
+    height: 420px;
   }
 }
 </style>

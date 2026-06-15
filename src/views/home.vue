@@ -104,19 +104,25 @@ onUnmounted(() => {
         alt="Hero Image Artquake"
       />
 
-      <h1 class="h1-font"><em>ART</em>QUAKE</h1>
+      <div class="hero-content">
+        <span class="hero-label">Creatief &amp; Cultureel Platform</span>
+        <h1 class="h1-font"><em>ART</em>QUAKE</h1>
+        <p>
+          Waar jongeren samen kunst creëren, elkaar inspireren, van elkaar leren
+          en zichzelf zo verder kunnen ontwikkelen.
+        </p>
+        <div class="hero-actions">
+          <router-link to="/artiesten" class="btn">Bekijk de artiesten</router-link>
+          <router-link to="/contact" class="btn btn-outline">Neem contact op</router-link>
+        </div>
+      </div>
 
-      <p>
-        Waar jongeren samen kunst creëren, elkaar inspireren, van elkaar leren
-        en zichzelf zo verder kunnen ontwikkelen.
-      </p>
-
-      <router-link to="/artiesten" class="btn">
-        Bekijk de artiesten
-      </router-link>
+      <a class="scroll-indicator" href="#over-ons" aria-label="Scroll naar beneden">
+        <span></span>
+      </a>
     </section>
 
-    <section>
+    <section id="over-ons">
       <h2 class="h2-font">Stichting Villa <em>Artquake</em></h2>
       <span class="line"></span>
       <p>
@@ -128,12 +134,14 @@ onUnmounted(() => {
     </section>
 
     <section>
-      <h2 class="h2-font">Bekijk de <em>video</em> van onze locatie</h2>
-      <span class="line"></span>
-      <p>
-        Heb je een job, project of optreden? Zet ’m op het Prikbord en kom in
-        contact met makers.
-      </p>
+      <div class="video-text">
+        <h2 class="h2-font">Bekijk de <em>video</em> van onze locatie</h2>
+        <span class="line"></span>
+        <p>
+          Heb je een job, project of optreden? Zet ‘m op het Prikbord en kom in
+          contact met makers.
+        </p>
+      </div>
 
       <figure class="video-container">
         <video
@@ -190,6 +198,10 @@ section {
   justify-content: left;
   padding: 5rem 1.5rem;
 
+  @media (min-width: 900px) {
+    padding-inline: max(var(--gap), calc((100vw - var(--content-max)) / 2));
+  }
+
   .line {
     background: var(--c-primary);
     width: 4rem;
@@ -207,6 +219,9 @@ section {
 
   &:nth-of-type(1) {
     height: 100dvh;
+    place-items: center;
+    place-content: center;
+    text-align: center;
 
     .hero-img {
       position: absolute;
@@ -223,50 +238,113 @@ section {
       opacity: 1;
     }
 
-    @media (min-width: 900px) {
-      place-content: center;
-      text-align: center;
-    }
-
-    h1,
-    p,
-    a {
+    .hero-content {
       z-index: 2;
+      display: grid;
+      gap: 1.5rem;
+      place-items: center;
+      max-width: 55rem;
       opacity: 0;
-      animation: fadeInUp 0.8s ease-out forwards;
+      animation: fadeInUp 0.9s ease-out 0.1s forwards;
 
       @media (min-width: 900px) {
-        justify-self: center;
+        gap: 2rem;
       }
     }
 
+    .hero-label {
+      display: inline-block;
+      border: 1px solid hsla(0, 0%, 100%, 0.35);
+      border-radius: 999px;
+      padding: 0.4rem 1.2rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: hsla(0, 0%, 100%, 0.8);
+      backdrop-filter: blur(4px);
+    }
+
     h1 {
-      animation: fadeInUp 0.8s ease-out 0.2s forwards,
-        glitch 3s ease-in-out 2s infinite;
+      animation: glitch 3s ease-in-out 2s infinite;
+      line-height: 1;
+
+      @media (min-width: 900px) {
+        font-size: clamp(4rem, 10vw, 9rem);
+      }
     }
 
     p {
-      animation-delay: 0.4s;
+      max-width: 36rem;
+      color: hsla(0, 0%, 100%, 0.88);
     }
 
-    a {
-      animation-delay: 0.6s;
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      span {
+        display: block;
+        width: 1.5px;
+        height: 3.5rem;
+        background: linear-gradient(to bottom, transparent, hsla(0, 0%, 100%, 0.6));
+        animation: scrollLine 1.8s ease-in-out infinite;
+      }
     }
 
     &::after {
-      background: var(--c-overlay-light);
+      background:
+        linear-gradient(to bottom, transparent 50%, var(--c-bg) 100%),
+        hsla(0, 0%, 0%, 0.65);
       height: 100%;
       width: 100%;
       content: "";
       position: absolute;
       top: 0;
+      z-index: 1;
     }
   }
 
   &:nth-of-type(2) {
+    background: linear-gradient(to bottom, var(--c-bg) 0%, var(--c-bg-alt) 12rem) !important;
+
     h2:before {
       content: var(--t-1);
       color: var(--c-pseudo-dark);
+    }
+
+    @media (min-width: 900px) {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      column-gap: 4rem;
+
+      h2,
+      .line,
+      p {
+        grid-column: 1;
+      }
+
+      &::after {
+        content: "";
+        grid-column: 2;
+        grid-row: 1 / span 3;
+        background: url("../assets/pictures/artquake-gebouw.avif") center / cover no-repeat;
+        border-radius: var(--br-lg);
+        min-height: 25rem;
+        align-self: stretch;
+      }
     }
   }
 
@@ -339,25 +417,24 @@ section {
       margin-top: 2rem;
     }
 
+    .video-text {
+      display: grid;
+      gap: 1.5rem;
+    }
+
     @media (min-width: 900px) {
       grid-template-columns: 1fr 1fr;
       align-items: center;
-
-      h2,
-      .line,
-      p {
-        grid-column: 1;
-      }
+      column-gap: 4rem;
 
       .video-container {
-        grid-column: 2;
-        grid-row: 1 / span 3;
         align-self: center;
       }
 
       video {
         max-width: 100%;
         margin-top: 0;
+        border-radius: var(--br-lg);
       }
     }
   }
@@ -378,6 +455,28 @@ section {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes scrollLine {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+    opacity: 1;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+    opacity: 1;
+  }
+  51% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+    opacity: 0.3;
   }
 }
 
